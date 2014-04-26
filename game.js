@@ -4,7 +4,7 @@ function preload () {
   game.load.tilemap('level', 'assets/level0.json', null, Phaser.Tilemap.TILED_JSON);
   game.load.spritesheet('dude', 'assets/dude.png', 24, 24);
   game.load.image('bg', 'assets/bg.png', 800, 600);
-  game.load.image('tiles', 'assets/tiles.png', 32, 32);
+  game.load.image('tiles', 'assets/tiles.png', 112, 32);
   game.load.image('gui', 'assets/gui.png', 800, 24);
 }
 
@@ -19,7 +19,7 @@ var playerAccel = 60;
 var playerDecel = 60;
 var playerJumpStrength = 460;
 var gravity = 1200;
-var terminalVelocity = 2000;
+var terminalVelocity = playerJumpStrength*1.5;
 var shadowTexture;
 var lightSprite;
 var lightRadius = 200;
@@ -134,56 +134,53 @@ function update () {
   mousePointer.x = this.game.input.activePointer.worldX;
   mousePointer.y = this.game.input.activePointer.worldY;
 
-
-    // Update the shadow texture each frame
-    updateShadowTexture();
-
+  // Update the shadow texture each frame
+  updateShadowTexture();
 
 }
 
 function updateShadowTexture() {
-    // This function updates the shadow texture (this.shadowTexture).
-    // First, it fills the entire texture with a dark shadow color.
-    // Then it draws a white circle centered on the pointer position.
-    // Because the texture is drawn to the screen using the MULTIPLY
-    // blend mode, the dark areas of the texture make all of the colors
-    // underneath it darker, while the white area is unaffected.
+  // This function updates the shadow texture (this.shadowTexture).
+  // First, it fills the entire texture with a dark shadow color.
+  // Then it draws a white circle centered on the pointer position.
+  // Because the texture is drawn to the screen using the MULTIPLY
+  // blend mode, the dark areas of the texture make all of the colors
+  // underneath it darker, while the white area is unaffected.
 
-    // Draw shadow
-    shadowTexture.context.fillStyle = 'rgb(0, 0, 0)';
-    shadowTexture.context.fillRect(this.game.width, this.game.height, 2*this.game.width, 2*this.game.height);
+  // Draw shadow
+  shadowTexture.context.fillStyle = 'rgb(0, 0, 0)';
+  shadowTexture.context.fillRect(this.game.width, this.game.height, 2*this.game.width, 2*this.game.height);
 
-    // Draw circle of light with a soft edge
-    var gradient = this.shadowTexture.context.createRadialGradient(
-        2*this.game.width,2*this.game.height, lightRadius * 0.5,
-        2*this.game.width,2*this.game.height, lightRadius);
-    gradient.addColorStop(0, 'rgba(255, 255, 255, 0.5)');
-    gradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
+  // Draw circle of light with a soft edge
+  var gradient = this.shadowTexture.context.createRadialGradient(
+      2*this.game.width,2*this.game.height, lightRadius * 0.5,
+      2*this.game.width,2*this.game.height, lightRadius);
+  gradient.addColorStop(0, 'rgba(255, 255, 255, 0.5)');
+  gradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
 
-    this.shadowTexture.context.beginPath();
-    this.shadowTexture.context.fillStyle = gradient;
-    this.shadowTexture.context.arc(2*this.game.width, 2*this.game.height,
-        lightRadius, 0, Math.PI*2);
-    this.shadowTexture.context.fill();
-
-
-    var angleToMouse= Math.atan2(mousePointer.y - player.body.y, mousePointer.x - player.body.x);
-    this.shadowTexture.context.beginPath();
-    this.shadowTexture.context.fillStyle = 'rgb(255, 255, 255)';
-    this.shadowTexture.context.arc(2*this.game.width, 2*this.game.height,
-       this.game.width + this.game.height, angleToMouse-Math.PI/8, angleToMouse + Math.PI/8);
-    this.shadowTexture.context.lineTo(2*this.game.width, 2*this.game.height);
-    this.shadowTexture.context.fill();
+  this.shadowTexture.context.beginPath();
+  this.shadowTexture.context.fillStyle = gradient;
+  this.shadowTexture.context.arc(2*this.game.width, 2*this.game.height,
+      lightRadius, 0, Math.PI*2);
+  this.shadowTexture.context.fill();
 
 
+  var angleToMouse= Math.atan2(mousePointer.y - player.body.y, mousePointer.x - player.body.x);
+  this.shadowTexture.context.beginPath();
+  this.shadowTexture.context.fillStyle = 'rgb(255, 255, 255)';
+  this.shadowTexture.context.arc(2*this.game.width, 2*this.game.height,
+     this.game.width + this.game.height, angleToMouse-Math.PI/8, angleToMouse + Math.PI/8);
+  this.shadowTexture.context.lineTo(2*this.game.width, 2*this.game.height);
+  this.shadowTexture.context.fill();
 
-    lightSprite.x = player.body.x - 2*this.game.width + 6;
-    lightSprite.y = player.body.y - 2*this.game.height + 12;
+  lightSprite.x = player.body.x - 2*this.game.width + 6;
+  lightSprite.y = player.body.y - 2*this.game.height + 18;
 
-    // This just tells the engine it should update the texture cache
-    shadowTexture.dirty = true;
-    lightSprite.dirty = true;
-    player.dirty = true;
+  // This just tells the engine it should update the texture cache
+  shadowTexture.dirty = true;
+  lightSprite.dirty = true;
+  player.dirty = true;
+
 }
 
 function render() {
