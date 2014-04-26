@@ -16,6 +16,9 @@ var playerDecel = 60;
 var playerJumpStrength = 460;
 var gravity = 1200;
 var terminalVelocity = 2000;
+var shadowTexture;
+var lightSprite;
+var lightRadius = 300;
 
 function create () {
   game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -51,6 +54,18 @@ function create () {
   cursors = game.input.keyboard.createCursorKeys();
 
   game.camera.follow(player);
+
+
+
+  // Create the shadow texture
+  shadowTexture = this.game.add.bitmapData(4*this.game.width, 4*this.game.height);
+
+  // Create an object that will use the bitmap as a texture
+  lightSprite = this.game.add.image(0, 0, shadowTexture);
+
+  // Set the blend mode to MULTIPLY. This will darken the colors of
+  // everything below this sprite.
+  lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
 
 }
 
@@ -103,6 +118,43 @@ function update () {
     player.body.velocity.y = -playerJumpStrength;
   }
 
+    // Update the shadow texture each frame
+    updateShadowTexture();
+
+
+}
+
+function updateShadowTexture() {
+    // This function updates the shadow texture (this.shadowTexture).
+    // First, it fills the entire texture with a dark shadow color.
+    // Then it draws a white circle centered on the pointer position.
+    // Because the texture is drawn to the screen using the MULTIPLY
+    // blend mode, the dark areas of the texture make all of the colors
+    // underneath it darker, while the white area is unaffected.
+
+    // Draw shadow
+    shadowTexture.context.fillStyle = 'rgb(0, 0, 0)';
+    shadowTexture.context.fillRect(0, 0, 4*this.game.width, 4*this.game.height);
+
+    // Draw circle of light with a soft edge
+    var gradient = this.shadowTexture.context.createRadialGradient(
+        2*this.game.width,2*this.game.height, lightRadius * 0.5,
+        2*this.game.width,2*this.game.height, lightRadius);
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 1.0)');
+    gradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
+
+    this.shadowTexture.context.beginPath();
+    this.shadowTexture.context.fillStyle = gradient;
+    this.shadowTexture.context.arc(2*this.game.width, 2*this.game.height,
+        lightRadius, 0, Math.PI*2);
+    this.shadowTexture.context.fill();
+
+    lightSprite.x = player.body.x - 2*this.game.width;
+    lightSprite.y = player.body.y - 2*this.game.height;
+
+    // This just tells the engine it should update the texture cache
+    shadowTexture.dirty = true;
+    lightSprite.dirty = true;
 }
 
 function render() {
