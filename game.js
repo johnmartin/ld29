@@ -26,9 +26,10 @@ function create () {
 
   layer = map.createLayer('Tiles');
   // layer.debug = true;
+  layer.resizeWorld();
 
   // The player and its settings
-  player = game.add.sprite(400, 300, 'dude');
+  player = game.add.sprite(700, 400, 'dude');
   game.physics.enable(player);
 
   game.physics.arcade.gravity.y = gravity;
@@ -39,6 +40,8 @@ function create () {
 
   //  Our controls.
   cursors = game.input.keyboard.createCursorKeys();
+
+  game.camera.follow(player);
 
 }
 
