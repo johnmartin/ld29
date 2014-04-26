@@ -19,7 +19,8 @@ var gravity = 1200;
 var terminalVelocity = 2000;
 var shadowTexture;
 var lightSprite;
-var lightRadius = 300;
+var lightRadius = 200;
+var mousePointer;
 
 function create () {
   game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -38,7 +39,7 @@ function create () {
   layer.resizeWorld();
 
   // The player and its settings
-  player = game.add.sprite(700, 400, 'dude');
+  player = game.add.sprite(100, 100, 'dude');
   player.name = 'dude';
   player.debug = true;
   player.animations.add('idle-right', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 5);
@@ -58,6 +59,9 @@ function create () {
   cursors = game.input.keyboard.createCursorKeys();
 
   game.camera.follow(player);
+
+  // Add the mouse pointer
+  mousePointer = this.game.add.sprite(this.game.width/2, this.game.height/2);
 
   // Create the shadow texture
   shadowTexture = game.add.bitmapData(4*game.width, 4*game.height);
@@ -120,6 +124,11 @@ function update () {
     player.body.velocity.y = -playerJumpStrength;
   }
 
+  // Update mouse pointer location
+  mousePointer.x = this.game.input.activePointer.worldX;
+  mousePointer.y = this.game.input.activePointer.worldY;
+
+
     // Update the shadow texture each frame
     updateShadowTexture();
 
@@ -150,6 +159,17 @@ function updateShadowTexture() {
     this.shadowTexture.context.arc(2*this.game.width, 2*this.game.height,
         lightRadius, 0, Math.PI*2);
     this.shadowTexture.context.fill();
+
+
+    var angleToMouse= Math.atan2(mousePointer.y - player.body.y, mousePointer.x - player.body.x);
+    this.shadowTexture.context.beginPath();
+    this.shadowTexture.context.fillStyle = 'rgb(255, 255, 255)';
+    this.shadowTexture.context.arc(2*this.game.width, 2*this.game.height,
+       this.game.width + this.game.height, angleToMouse-Math.PI/8, angleToMouse + Math.PI/8);
+    this.shadowTexture.context.lineTo(2*this.game.width, 2*this.game.height);
+    this.shadowTexture.context.fill();
+
+
 
     lightSprite.x = player.body.x - 2*this.game.width;
     lightSprite.y = player.body.y - 2*this.game.height;
