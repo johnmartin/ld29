@@ -58,7 +58,7 @@ function create () {
   playerGibs.gravity = gravity/4;
 
   // Add the mouse pointer
-  mousePointer = this.game.add.sprite(this.game.width/2, this.game.height/2);
+  mousePointer = game.add.sprite(game.width/2, game.height/2);
 
   // Create Spikes!
   spikes = game.add.group();
@@ -127,7 +127,7 @@ function update () {
   game.physics.arcade.overlap(player, spikes, hitSpike);
   game.physics.arcade.overlap(player, batteries, hitBattery);
 
-  if(restartKey.isDown){
+  if (restartKey.isDown) {
     initialiseLevel();
   }
 
@@ -179,15 +179,15 @@ function update () {
 
 
   // update torch battery
-  if(batteryLife > 0){
+  if (batteryLife > 0) {
     batteryLife--;
   } else {
     torchOn = false;
   }
 
   // Update mouse pointer location
-  mousePointer.x = this.game.input.activePointer.worldX;
-  mousePointer.y = this.game.input.activePointer.worldY;
+  mousePointer.x = game.input.activePointer.worldX;
+  mousePointer.y = game.input.activePointer.worldY;
 
   // Update the shadow texture each frame
   updateShadowTexture();
@@ -196,7 +196,7 @@ function update () {
 
 // everything that happens at the start of the game and every time you restart
 // goes here
-function initialiseLevel(){
+function initialiseLevel () {
 
 
 }
@@ -210,7 +210,7 @@ function hitSpike (player, spike) {
 }
 
 //when the player hits a battery...
-function hitBattery(player, battery){
+function hitBattery (player, battery) {
   battery.kill();
   batteryLife += 1000;
   torchOn = true;
@@ -218,8 +218,8 @@ function hitBattery(player, battery){
 
 
 
-function updateShadowTexture() {
-  // This function updates the shadow texture (this.shadowTexture).
+function updateShadowTexture () {
+  // This function updates the shadow texture (shadowTexture).
   // First, it fills the entire texture with a dark shadow color.
   // Then it draws a white circle centered on the pointer position.
   // Because the texture is drawn to the screen using the MULTIPLY
@@ -228,42 +228,42 @@ function updateShadowTexture() {
 
   // Draw shadow
   shadowTexture.context.fillStyle = 'rgb(0, 0, 0)';
-  shadowTexture.context.fillRect(this.game.width, this.game.height, 2*this.game.width, 2*this.game.height);
+  shadowTexture.context.fillRect(game.width, game.height, 2*game.width, 2*game.height);
 
   // Draw circle of light with a soft edge (radius dependent on battery life)
   var radius = lightRadius * Math.max(Math.min(batteryLife, 1000)/1000, 0.4);
-  var gradient = this.shadowTexture.context.createRadialGradient(
-      2*this.game.width,2*this.game.height, radius * 0.5,
-      2*this.game.width,2*this.game.height, radius);
+  var gradient = shadowTexture.context.createRadialGradient(
+      2*game.width,2*game.height, radius * 0.5,
+      2*game.width,2*game.height, radius);
   gradient.addColorStop(0, 'rgba(255, 255, 255, 0.5)');
   gradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
 
-  this.shadowTexture.context.beginPath();
-  this.shadowTexture.context.fillStyle = gradient;
-  this.shadowTexture.context.arc(2*this.game.width, 2*this.game.height,
+  shadowTexture.context.beginPath();
+  shadowTexture.context.fillStyle = gradient;
+  shadowTexture.context.arc(2*game.width, 2*game.height,
       radius, 0, Math.PI*2);
-  this.shadowTexture.context.fill();
+  shadowTexture.context.fill();
 
   //draw torch light, if torch is on
   var flicker = false;
-  if(batteryLife <= 1000 && (batteryLife % 200 <  3)){
+  if (batteryLife <= 1000 && (batteryLife % 200 <  3)) {
     flicker = true;
   }
-  if (batteryLife < 100 && (batteryLife % 10 < 5)){
+  if (batteryLife < 100 && (batteryLife % 10 < 5)) {
     flicker = true;
   }
-  if(torchOn && !flicker){
+  if (torchOn && !flicker) {
     var angleToMouse= Math.atan2(mousePointer.y - player.body.y, mousePointer.x - player.body.x);
-    this.shadowTexture.context.beginPath();
-    this.shadowTexture.context.fillStyle = 'rgb(255, 255, 255)';
-    this.shadowTexture.context.arc(2*this.game.width, 2*this.game.height,
-    this.game.width + this.game.height, angleToMouse-Math.PI/8, angleToMouse + Math.PI/8);
-    this.shadowTexture.context.lineTo(2*this.game.width, 2*this.game.height);
-    this.shadowTexture.context.fill();
+    shadowTexture.context.beginPath();
+    shadowTexture.context.fillStyle = 'rgb(255, 255, 255)';
+    shadowTexture.context.arc(2*game.width, 2*game.height,
+    game.width + game.height, angleToMouse-Math.PI/8, angleToMouse + Math.PI/8);
+    shadowTexture.context.lineTo(2*game.width, 2*game.height);
+    shadowTexture.context.fill();
   }
 
-  lightSprite.x = player.body.x - 2*this.game.width + 6;
-  lightSprite.y = player.body.y - 2*this.game.height + 18;
+  lightSprite.x = player.body.x - 2*game.width + 6;
+  lightSprite.y = player.body.y - 2*game.height + 18;
 
   // This just tells the engine it should update the texture cache
   shadowTexture.dirty = true;
@@ -278,6 +278,6 @@ function playerGibby () {
   playerGibs.start(true, 2000, null, 60);
 }
 
-function render() {
+function render () {
   // game.debug.bodyInfo(player, 32, 320);
 }
