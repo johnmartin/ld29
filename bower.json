@@ -4,7 +4,6 @@
   "license": "proprietary",
   "private": true,
   "dependencies": {
-    "phaser": "2.0.2",
-    "jquery": "2.1.0"
+    "phaser": "2.0.2"
   }
 }
