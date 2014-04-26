@@ -1,7 +1,11 @@
 var game = new Phaser.Game(544, 544, Phaser.AUTO, 'game', { preload: preload, create: create, update: update, render: render }, false, false);
 
+var amIProcedural = true;
+
 function preload () {
-  game.load.tilemap('level', 'assets/level0.json', null, Phaser.Tilemap.TILED_JSON);
+  if (!amIProcedural){
+    game.load.tilemap('level', 'assets/level0.json', null, Phaser.Tilemap.TILED_JSON);
+  }
   game.load.spritesheet('dude', 'assets/dude.png', 24, 24);
   game.load.image('bg', 'assets/bg.png', 544, 544);
   game.load.image('tiles', 'assets/tiles.png', 112, 32);
@@ -44,8 +48,12 @@ var torchOn;
 function create () {
   game.physics.startSystem(Phaser.Physics.ARCADE);
 
-  map = game.add.tilemap('level');
-  map.addTilesetImage('tiles');
+  if (amIProcedural){
+    var jsonMap = createMap();
+    game.cache.addTilemap('level', null, jsonMap, Phaser.Tilemap.TILED_JSON);
+  }
+    map = game.add.tilemap('level');
+    map.addTilesetImage('tiles');
 
   bg = game.add.tileSprite(0, 0, 544, 544, 'bg');
   bg.fixedToCamera = true;
