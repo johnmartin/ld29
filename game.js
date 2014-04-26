@@ -3,6 +3,7 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', { preload: preload, cr
 function preload () {
   game.load.tilemap('level', 'assets/level0.json', null, Phaser.Tilemap.TILED_JSON);
   game.load.spritesheet('dude', 'assets/dude.png', 24, 24);
+  game.load.image('bg', 'assets/bg.png', 800, 600);
   game.load.image('tiles', 'assets/tiles.png', 32, 32);
 }
 
@@ -26,8 +27,11 @@ function create () {
   map = game.add.tilemap('level');
   map.addTilesetImage('tiles');
 
+  bg = game.add.tileSprite(0, 0, 800, 600, 'bg');
+  bg.fixedToCamera = true;
+
   // tileset = game.add.tileset('tiles');
-  map.setCollisionBetween(2, 3);
+  map.setCollisionBetween(1, 6);
 
   layer = map.createLayer('Tiles');
   // layer.debug = true;
@@ -55,13 +59,11 @@ function create () {
 
   game.camera.follow(player);
 
-
-
   // Create the shadow texture
-  shadowTexture = this.game.add.bitmapData(4*this.game.width, 4*this.game.height);
+  shadowTexture = game.add.bitmapData(4*game.width, 4*game.height);
 
   // Create an object that will use the bitmap as a texture
-  lightSprite = this.game.add.image(0, 0, shadowTexture);
+  lightSprite = game.add.image(0, 0, shadowTexture);
 
   // Set the blend mode to MULTIPLY. This will darken the colors of
   // everything below this sprite.
