@@ -60,9 +60,12 @@ function create () {
 
   game.camera.follow(player);
 
+<<<<<<< HEAD
+=======
   // Add the mouse pointer
   mousePointer = this.game.add.sprite(this.game.width/2, this.game.height/2);
 
+>>>>>>> Add a beam of torchlight pointing from the player towards the mouse pointer
   // Create the shadow texture
   shadowTexture = game.add.bitmapData(4*game.width, 4*game.height);
 
@@ -151,7 +154,7 @@ function updateShadowTexture() {
     var gradient = this.shadowTexture.context.createRadialGradient(
         2*this.game.width,2*this.game.height, lightRadius * 0.5,
         2*this.game.width,2*this.game.height, lightRadius);
-    gradient.addColorStop(0, 'rgba(255, 255, 255, 0.5)');
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 1.0)');
     gradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
 
     this.shadowTexture.context.beginPath();
@@ -171,13 +174,12 @@ function updateShadowTexture() {
 
 
 
-    lightSprite.x = player.body.x - 2*this.game.width + 6;
-    lightSprite.y = player.body.y - 2*this.game.height + 12;
+    lightSprite.x = player.body.x - 2*this.game.width;
+    lightSprite.y = player.body.y - 2*this.game.height;
 
     // This just tells the engine it should update the texture cache
     shadowTexture.dirty = true;
     lightSprite.dirty = true;
-    player.dirty = true;
 }
 
 function render() {
