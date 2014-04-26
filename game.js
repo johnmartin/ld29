@@ -9,6 +9,11 @@ function preload () {
 var map;
 var layer;
 var player;
+var playerTopSpeed = 300;
+var playerAccel = 60;
+var playerDecel = 60;
+var playerJumpStrength = 460;
+var gravity = 1200;
 
 function create () {
   game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -26,7 +31,7 @@ function create () {
   player = game.add.sprite(400, 300, 'dude');
   game.physics.enable(player);
 
-  game.physics.arcade.gravity.y = 600;
+  game.physics.arcade.gravity.y = gravity;
 
   player.body.bounce.y = 0.2;
   player.body.linearDamping = 1;
@@ -41,25 +46,45 @@ function update () {
   game.physics.arcade.collide(player, layer);
 
   //  Reset the players velocity (movement)
-  player.body.velocity.x = 0;
+  // player.body.velocity.x = 0;
 
   if (cursors.left.isDown) {
     // Move to the left
-    player.body.velocity.x = -150;
+    if (player.body.velocity.x > -playerTopSpeed){
+      player.body.velocity.x -= playerAccel;
+    } else {
+      player.body.velocity.x = -playerTopSpeed;
+    }
     player.animations.play('left');
   } else if (cursors.right.isDown) {
     // Move to the right
-    player.body.velocity.x = 150;
+    if (player.body.velocity.x < playerTopSpeed){
+      player.body.velocity.x += playerAccel;
+    } else {
+      player.body.velocity.x = playerTopSpeed;
+    }
     player.animations.play('right');
   } else {
     // Stand still
-    player.animations.stop();
-    player.frame = 4;
+    if (player.body.velocity.x > playerDecel ) {
+      // slow down movement to right
+      player.body.velocity.x -= playerDecel;
+      player.animations.play('right');
+    } else if (player.body.velocity.x < -playerDecel){
+      // slow down movement to left
+      player.body.velocity.x += playerDecel;
+      player.animations.play('left');
+    } else {
+      player.body.velocity.x = 0;
+      //  Stand still
+      player.animations.stop();
+      player.frame = 4;
+    }
   }
 
   //  Allow the player to jump if they are touching the ground.
   if (cursors.up.isDown && player.body.onFloor()) {
-    player.body.velocity.y = -230;
+    player.body.velocity.y = -playerJumpStrength;
   }
 
 }
