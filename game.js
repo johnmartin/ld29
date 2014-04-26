@@ -151,7 +151,7 @@ function updateShadowTexture() {
 
     // Draw shadow
     shadowTexture.context.fillStyle = 'rgb(0, 0, 0)';
-    shadowTexture.context.fillRect(0, 0, 4*this.game.width, 4*this.game.height);
+    shadowTexture.context.fillRect(this.game.width, this.game.height, 2*this.game.width, 2*this.game.height);
 
     // Draw circle of light with a soft edge
     var gradient = this.shadowTexture.context.createRadialGradient(
