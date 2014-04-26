@@ -6,6 +6,7 @@ function preload () {
   game.load.image('bg', 'assets/bg.png', 800, 600);
   game.load.image('tiles', 'assets/tiles.png', 112, 32);
   game.load.image('gui', 'assets/gui.png', 800, 24);
+  game.load.spritesheet('gibs', 'assets/gibs.png', 4, 4);
 }
 
 var map;
@@ -18,6 +19,7 @@ var playerTopSpeed = 300;
 var playerAccel = 60;
 var playerDecel = 60;
 var playerJumpStrength = 460;
+var playerGibs;
 var gravity = 1200;
 var terminalVelocity = playerJumpStrength*1.5;
 var shadowTexture;
@@ -40,6 +42,10 @@ function create () {
   layer = map.createLayer('Tiles');
   // layer.debug = true;
   layer.resizeWorld();
+
+  playerGibs = game.add.emitter(0, 0, 4);
+  playerGibs.makeParticles('gibs', [0, 1, 2, 3, 4], 200, true, true);
+  playerGibs.gravity = 0-(gravity/4);
 
   // Add the mouse pointer
   mousePointer = this.game.add.sprite(this.game.width/2, this.game.height/2);
@@ -83,6 +89,7 @@ function create () {
 
 function update () {
   game.physics.arcade.collide(player, layer);
+  game.physics.arcade.collide(playerGibs, layer);
 
   if (cursors.left.isDown) {
     // Move to the left
@@ -139,7 +146,7 @@ function update () {
 
 }
 
-function updateShadowTexture() {
+function updateShadowTexture () {
   // This function updates the shadow texture (this.shadowTexture).
   // First, it fills the entire texture with a dark shadow color.
   // Then it draws a white circle centered on the pointer position.
@@ -181,6 +188,12 @@ function updateShadowTexture() {
   lightSprite.dirty = true;
   player.dirty = true;
 
+}
+
+function playerGibby () {
+  playerGibs.x = player.x;
+  playerGibs.y = player.y;
+  playerGibs.start(true, 2000, null, 10);
 }
 
 function render() {
