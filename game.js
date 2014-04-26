@@ -115,6 +115,7 @@ function create () {
   leftKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
   downKey = game.input.keyboard.addKey(Phaser.Keyboard.S);
   rightKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
+  restartKey = game.input.keyboard.addKey(Phaser.Keyboard.R);
   cursors = game.input.keyboard.createCursorKeys();
 }
 
@@ -125,6 +126,10 @@ function update () {
   //  Checks to see if the player overlaps with any of the spikes, if he does call the hitSpike function
   game.physics.arcade.overlap(player, spikes, hitSpike);
   game.physics.arcade.overlap(player, batteries, hitBattery);
+
+  if(restartKey.isDown){
+    initialiseLevel();
+  }
 
   if (cursors.left.isDown || leftKey.isDown) {
     // Move to the left
@@ -186,6 +191,13 @@ function update () {
 
   // Update the shadow texture each frame
   updateShadowTexture();
+
+}
+
+// everything that happens at the start of the game and every time you restart
+// goes here
+function initialiseLevel(){
+
 
 }
 
