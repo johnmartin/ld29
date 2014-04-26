@@ -1,11 +1,11 @@
-var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', { preload: preload, create: create, update: update, render: render }, false, false);
+var game = new Phaser.Game(544, 544, Phaser.AUTO, 'game', { preload: preload, create: create, update: update, render: render }, false, false);
 
 function preload () {
   game.load.tilemap('level', 'assets/level0.json', null, Phaser.Tilemap.TILED_JSON);
   game.load.spritesheet('dude', 'assets/dude.png', 24, 24);
-  game.load.image('bg', 'assets/bg.png', 800, 600);
+  game.load.image('bg', 'assets/bg.png', 544, 544);
   game.load.image('tiles', 'assets/tiles.png', 112, 32);
-  game.load.image('gui', 'assets/gui.png', 800, 24);
+  game.load.image('gui', 'assets/gui.png', 544, 36);
   game.load.image('spike', 'assets/spikes.png', 32, 16);
   game.load.image('battery', 'assets/battery.png', 16, 16);
   game.load.spritesheet('gibs', 'assets/gibs.png', 4, 4);
@@ -43,7 +43,7 @@ function create () {
   map = game.add.tilemap('level');
   map.addTilesetImage('tiles');
 
-  bg = game.add.tileSprite(0, 0, 800, 600, 'bg');
+  bg = game.add.tileSprite(0, 0, 544, 544, 'bg');
   bg.fixedToCamera = true;
 
   // tileset = game.add.tileset('tiles');
@@ -105,7 +105,7 @@ function create () {
   torchOn = true;
 
   // Create the GUI
-  gui = game.add.tileSprite(10, 10, 776, 24, 'gui');
+  gui = game.add.tileSprite(0, 0, 544, 36, 'gui');
   gui.fixedToCamera = true;
 
   game.camera.follow(player);
