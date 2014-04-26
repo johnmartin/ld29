@@ -9,6 +9,7 @@ function preload () {
 var map;
 var layer;
 var player;
+var playerDirection = 'right';
 var playerTopSpeed = 300;
 var playerAccel = 60;
 var playerDecel = 60;
@@ -31,10 +32,17 @@ function create () {
 
   // The player and its settings
   player = game.add.sprite(700, 400, 'dude');
+  player.name = 'dude';
+  player.debug = true;
+  player.animations.add('idle-right', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 5);
+  player.animations.add('idle-left', [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5], 5);
+  player.animations.add('move-right', [2, 3], 10);
+  player.animations.add('move-left', [6, 7], 10);
   game.physics.enable(player);
 
   game.physics.arcade.gravity.y = gravity;
 
+  player.body.setSize(12, 24, 6, 0);
   player.body.bounce.y = 0.2;
   player.body.linearDamping = 1;
   player.body.collideWorldBounds = true;
@@ -49,45 +57,45 @@ function create () {
 function update () {
   game.physics.arcade.collide(player, layer);
 
-  //  Reset the players velocity (movement)
-  // player.body.velocity.x = 0;
-
   if (cursors.left.isDown) {
     // Move to the left
-    if (player.body.velocity.x > -playerTopSpeed){
+    if (player.body.velocity.x > -playerTopSpeed) {
       player.body.velocity.x -= playerAccel;
     } else {
       player.body.velocity.x = -playerTopSpeed;
     }
-    player.animations.play('left');
+    player.animations.play('move-left');
+    playerDirection = 'left';
   } else if (cursors.right.isDown) {
     // Move to the right
-    if (player.body.velocity.x < playerTopSpeed){
+    if (player.body.velocity.x < playerTopSpeed) {
       player.body.velocity.x += playerAccel;
     } else {
       player.body.velocity.x = playerTopSpeed;
     }
-    player.animations.play('right');
+    player.animations.play('move-right');
+    playerDirection = 'right';
   } else {
     // Stand still
-    if (player.body.velocity.x > playerDecel ) {
+    if (player.body.velocity.x > playerDecel) {
       // slow down movement to right
       player.body.velocity.x -= playerDecel;
-      player.animations.play('right');
-    } else if (player.body.velocity.x < -playerDecel){
+      player.animations.play('move-right');
+      playerDirection = 'right';
+    } else if (player.body.velocity.x < -playerDecel) {
       // slow down movement to left
       player.body.velocity.x += playerDecel;
-      player.animations.play('left');
+      player.animations.play('move-left');
+      playerDirection = 'left';
     } else {
       player.body.velocity.x = 0;
       //  Stand still
-      player.animations.stop();
-      player.frame = 4;
+      player.animations.play('idle-'+playerDirection);
     }
   }
 
   //update vertical movement based on terminal velocty - don't fall too fast!
-  if (player.body.velocity.y > terminalVelocity){
+  if (player.body.velocity.y > terminalVelocity) {
     player.body.velocity.y = terminalVelocity;
   }
   //  Allow the player to jump if they are touching the ground.
