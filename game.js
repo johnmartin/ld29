@@ -5,11 +5,14 @@ function preload () {
   game.load.spritesheet('dude', 'assets/dude.png', 24, 24);
   game.load.image('bg', 'assets/bg.png', 800, 600);
   game.load.image('tiles', 'assets/tiles.png', 32, 32);
+  game.load.image('gui', 'assets/gui.png', 800, 24);
 }
 
 var map;
 var layer;
 var player;
+var bg;
+var gui;
 var playerDirection = 'right';
 var playerTopSpeed = 300;
 var playerAccel = 60;
@@ -72,6 +75,9 @@ function create () {
   // Set the blend mode to MULTIPLY. This will darken the colors of
   // everything below this sprite.
   lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
+
+  gui = game.add.tileSprite(10, 10, 776, 24, 'gui');
+  gui.fixedToCamera = true;
 
 }
 
