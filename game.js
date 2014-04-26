@@ -47,7 +47,7 @@ function create () {
 
   playerGibs = game.add.emitter(0, 0, 4);
   playerGibs.makeParticles('gibs', [0, 1, 2, 3, 4], 200, true, true);
-  playerGibs.gravity = 0-(gravity/4);
+  playerGibs.gravity = gravity/4;
 
   // Add the mouse pointer
   mousePointer = this.game.add.sprite(this.game.width/2, this.game.height/2);
@@ -162,6 +162,7 @@ function update () {
 function hitSpike (player, spike) {
     // You die!!!
     player.kill();
+    playerGibby();
     console.log("R.I.P. the player");
 }
 
@@ -214,7 +215,7 @@ function updateShadowTexture() {
 function playerGibby () {
   playerGibs.x = player.x;
   playerGibs.y = player.y;
-  playerGibs.start(true, 2000, null, 10);
+  playerGibs.start(true, 2000, null, 60);
 }
 
 function render() {
