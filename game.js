@@ -6,6 +6,7 @@ function preload () {
   game.load.image('bg', 'assets/bg.png', 800, 600);
   game.load.image('tiles', 'assets/tiles.png', 112, 32);
   game.load.image('gui', 'assets/gui.png', 800, 24);
+  game.load.image('spike', 'assets/spike.png', 32, 32);
   game.load.spritesheet('gibs', 'assets/gibs.png', 4, 4);
 }
 
@@ -26,6 +27,7 @@ var shadowTexture;
 var lightSprite;
 var lightRadius = 200;
 var mousePointer;
+var spikes;
 
 function create () {
   game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -50,18 +52,25 @@ function create () {
   // Add the mouse pointer
   mousePointer = this.game.add.sprite(this.game.width/2, this.game.height/2);
 
+  // Light and shadow stuff
   // Create the shadow texture
   shadowTexture = game.add.bitmapData(4*game.width, 4*game.height);
-
   // Create an object that will use the bitmap as a texture
   lightSprite = game.add.image(0, 0, shadowTexture);
-
   // Set the blend mode to MULTIPLY. This will darken the colors of
   // everything below this sprite.
   lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
 
+  // Create Spikes!
+  spikes = game.add.group();
+  // spikes.debug = true;
+  spikes.enableBody = true;
+  spikes.immovable = true;
+  //  And now we convert all of the Tiled objects with an ID of 7 into actual, dangerous sprites within the group spikes
+  map.createFromObjects('Spikes', 10, null, 7, true, false, spikes);
+
   // The player and its settings
-  player = game.add.sprite(100, 100, 'dude');
+  player = game.add.sprite(700, 400, 'dude');
   player.name = 'dude';
   player.debug = true;
   player.animations.add('idle-right', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 5);
@@ -69,14 +78,14 @@ function create () {
   player.animations.add('move-right', [2, 3], 10);
   player.animations.add('move-left', [6, 7], 10);
   game.physics.enable(player);
-
-  game.physics.arcade.gravity.y = gravity;
+  player.body.gravity.y = gravity;
 
   player.body.setSize(12, 24, 6, 0);
   player.body.bounce.y = 0.2;
   player.body.linearDamping = 1;
   player.body.collideWorldBounds = true;
 
+  // Create the GUI
   gui = game.add.tileSprite(10, 10, 776, 24, 'gui');
   gui.fixedToCamera = true;
 
@@ -90,6 +99,9 @@ function create () {
 function update () {
   game.physics.arcade.collide(player, layer);
   game.physics.arcade.collide(playerGibs, layer);
+
+  //  Checks to see if the player overlaps with any of the spikes, if he does call the hitSpike function
+  game.physics.arcade.overlap(player, spikes, hitSpike);
 
   if (cursors.left.isDown) {
     // Move to the left
@@ -146,7 +158,16 @@ function update () {
 
 }
 
-function updateShadowTexture () {
+// when the player hits a spike...
+function hitSpike (player, spike) {
+    // You die!!!
+    player.kill();
+    console.log("R.I.P. the player");
+}
+
+
+
+function updateShadowTexture() {
   // This function updates the shadow texture (this.shadowTexture).
   // First, it fills the entire texture with a dark shadow color.
   // Then it draws a white circle centered on the pointer position.

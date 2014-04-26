@@ -16,6 +16,7 @@
          "name":"Spikes",
          "objects":[
                 {
+                 "gid":10,
                  "height":32,
                  "name":"",
                  "properties":
@@ -26,9 +27,10 @@
                  "visible":true,
                  "width":32,
                  "x":544,
-                 "y":608
+                 "y":640
                 }, 
                 {
+                 "gid":10,
                  "height":32,
                  "name":"",
                  "properties":
@@ -39,9 +41,10 @@
                  "visible":true,
                  "width":32,
                  "x":576,
-                 "y":608
+                 "y":640
                 }, 
                 {
+                 "gid":10,
                  "height":32,
                  "name":"",
                  "properties":
@@ -52,7 +55,7 @@
                  "visible":true,
                  "width":32,
                  "x":640,
-                 "y":576
+                 "y":608
                 }],
          "opacity":1,
          "type":"objectgroup",
