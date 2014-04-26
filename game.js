@@ -33,45 +33,35 @@ function create () {
   player.body.collideWorldBounds = true;
 
   //  Our controls.
-    cursors = game.input.keyboard.createCursorKeys();
+  cursors = game.input.keyboard.createCursorKeys();
 
 }
 
 function update () {
   game.physics.arcade.collide(player, layer);
 
-
   //  Reset the players velocity (movement)
   player.body.velocity.x = 0;
 
+  if (cursors.left.isDown) {
+    // Move to the left
+    player.body.velocity.x = -150;
+    player.animations.play('left');
+  } else if (cursors.right.isDown) {
+    // Move to the right
+    player.body.velocity.x = 150;
+    player.animations.play('right');
+  } else {
+    // Stand still
+    player.animations.stop();
+    player.frame = 4;
+  }
 
-  if (cursors.left.isDown)
-    {
-        //  Move to the left
-        player.body.velocity.x = -150;
+  //  Allow the player to jump if they are touching the ground.
+  if (cursors.up.isDown && player.body.onFloor()) {
+    player.body.velocity.y = -230;
+  }
 
-        player.animations.play('left');
-    }
-    else if (cursors.right.isDown)
-    {
-        //  Move to the right
-        player.body.velocity.x = 150;
-
-        player.animations.play('right');
-    }
-    else
-    {
-        //  Stand still
-        player.animations.stop();
-
-        player.frame = 4;
-    }
-    
-    //  Allow the player to jump if they are touching the ground.
-    if (cursors.up.isDown && player.body.onFloor())
-    {
-        player.body.velocity.y = -230;
-    }
 }
 
 function render() {
