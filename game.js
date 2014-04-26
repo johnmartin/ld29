@@ -30,11 +30,15 @@ var lightRadius = 200;
 var mousePointer;
 var spikes;
 var batteries;
+var guiGFX;
 var upKey;
 var leftKey;
 var rightKey;
 var downKey;
 var batteryLife;
+var batteryMax = 2000;
+var health = 100;
+var healthMax = 100;
 var torchOn;
 
 function create () {
@@ -54,8 +58,8 @@ function create () {
   layer.resizeWorld();
 
   playerGibs = game.add.emitter(0, 0, 4);
-  playerGibs.makeParticles('gibs', [0, 1, 2, 3, 4], 200, true, true);
-  playerGibs.gravity = gravity/4;
+  playerGibs.makeParticles('gibs', [0, 1, 2, 3, 4], 10, true, true);
+  playerGibs.gravity = gravity/2;
 
   // Add the mouse pointer
   mousePointer = game.add.sprite(game.width/2, game.height/2);
@@ -86,8 +90,6 @@ function create () {
 
   // The player and its settings
   player = game.add.sprite(700, 400, 'dude');
-  player.name = 'dude';
-  player.debug = true;
   player.animations.add('idle-right', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 5);
   player.animations.add('idle-left', [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5], 5);
   player.animations.add('move-right', [2, 3], 10);
@@ -107,6 +109,8 @@ function create () {
   // Create the GUI
   gui = game.add.tileSprite(0, 0, 544, 36, 'gui');
   gui.fixedToCamera = true;
+  guiGFX = game.add.graphics(0, 0);
+  guiGFX.fixedToCamera = true;
 
   game.camera.follow(player);
 
@@ -192,6 +196,9 @@ function update () {
   // Update the shadow texture each frame
   updateShadowTexture();
 
+  // Update the GUI items
+  updateGUI();
+
 }
 
 // everything that happens at the start of the game and every time you restart
@@ -203,16 +210,19 @@ function initialiseLevel () {
 
 // when the player hits a spike...
 function hitSpike (player, spike) {
-    // You die!!!
-    player.kill();
-    playerGibby();
-    console.log("R.I.P. the player");
+  // You die!!!
+  player.kill();
+  playerGibby();
+  health = 0;
 }
 
 //when the player hits a battery...
 function hitBattery (player, battery) {
   battery.kill();
   batteryLife += 1000;
+  if (batteryLife > batteryMax) {
+    batteryLife = batteryMax;
+  }
   torchOn = true;
 }
 
@@ -272,10 +282,22 @@ function updateShadowTexture () {
 
 }
 
+function updateGUI () {
+  guiGFX.clear();
+  // Battery
+  guiGFX.beginFill(0x5BB45D);
+  guiGFX.drawRect(442, 14, (batteryLife/batteryMax)*88, 8);
+  guiGFX.endFill();
+  // Health
+  guiGFX.beginFill(0xEA2C3F);
+  guiGFX.drawRect(14, 14, (health/healthMax)*88, 8);
+  guiGFX.endFill();
+}
+
 function playerGibby () {
-  playerGibs.x = player.x;
-  playerGibs.y = player.y;
-  playerGibs.start(true, 2000, null, 60);
+  playerGibs.x = player.x+6;
+  playerGibs.y = player.y+12;
+  playerGibs.start(true, 0, null, 60);
 }
 
 function render () {
