@@ -1,25 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Warning battery low</title>
+  <title>Warning: Battery low!</title>
   <style>
     body {
-      background-color: black;
+      background-color: #000;
     }
-    #game {
+    #wrapper {
       position: absolute;
       top: 50%;
       left: 50%;
-      border: 2px solid #999;
-      margin-top: -272px;
+      margin-top: -342px;
       margin-left: -272px;
+      text-align: center;
+    }
+    #game {
+      border: 2px solid rgba(255, 255, 255, 0.2);
     }
   </style>
 </head>
 
 <body>
 
-  <div id="game"></div>
+  <div id="wrapper">
+    <img src="assets/logo.png" width="250" height="100">
+    <div id="game"></div>
+  </div>
   <script src="vendor/phaser.js"></script>
   <script src="game.js"></script>
 

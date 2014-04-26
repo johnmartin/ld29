@@ -115,7 +115,7 @@ function create () {
   leftKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
   downKey = game.input.keyboard.addKey(Phaser.Keyboard.S);
   rightKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
-  restartKey = game.input.keyboard.addKey(Phaser.Keyboard.R);
+  restartKey = game.input.keyboard.addKey(Phaser.Keyboard.T);
   cursors = game.input.keyboard.createCursorKeys();
 }
 
