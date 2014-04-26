@@ -16,13 +16,13 @@
     {
 
     },
- "tileheight":16,
+ "tileheight":32,
  "tilesets":[
         {
          "firstgid":1,
          "image":"tiles.png",
-         "imageheight":16,
-         "imagewidth":48,
+         "imageheight":32,
+         "imagewidth":96,
          "margin":0,
          "name":"tiles",
          "properties":
@@ -30,10 +30,10 @@
 
             },
          "spacing":0,
-         "tileheight":16,
-         "tilewidth":16
+         "tileheight":32,
+         "tilewidth":32
         }],
- "tilewidth":16,
+ "tilewidth":32,
  "version":1,
  "width":50
 }

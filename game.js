@@ -2,8 +2,8 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', { preload: preload, cr
 
 function preload () {
   game.load.tilemap('level', 'assets/level0.json', null, Phaser.Tilemap.TILED_JSON);
-  game.load.spritesheet('dude', 'assets/dude.png', 12, 12);
-  game.load.image('tiles', 'assets/tiles.png', 16, 16);
+  game.load.spritesheet('dude', 'assets/dude.png', 24, 24);
+  game.load.image('tiles', 'assets/tiles.png', 32, 32);
 }
 
 var map;
