@@ -1,0 +1,9 @@
+{
+	"name": "johnmartin-ld29",
+	"version": "0.0.1",
+	"license": "proprietary",
+	"private": true,
+	"dependencies": {
+		"phaser": "2.0.2"
+	}
+}
