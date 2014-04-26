@@ -218,17 +218,18 @@ function updateShadowTexture() {
   shadowTexture.context.fillStyle = 'rgb(0, 0, 0)';
   shadowTexture.context.fillRect(this.game.width, this.game.height, 2*this.game.width, 2*this.game.height);
 
-  // Draw circle of light with a soft edge
+  // Draw circle of light with a soft edge (radius dependent on battery life)
+  var radius = lightRadius * Math.max(Math.min(batteryLife, 1000)/1000, 0.4);
   var gradient = this.shadowTexture.context.createRadialGradient(
-      2*this.game.width,2*this.game.height, lightRadius * 0.5,
-      2*this.game.width,2*this.game.height, lightRadius);
+      2*this.game.width,2*this.game.height, radius * 0.5,
+      2*this.game.width,2*this.game.height, radius);
   gradient.addColorStop(0, 'rgba(255, 255, 255, 0.5)');
   gradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
 
   this.shadowTexture.context.beginPath();
   this.shadowTexture.context.fillStyle = gradient;
   this.shadowTexture.context.arc(2*this.game.width, 2*this.game.height,
-      lightRadius, 0, Math.PI*2);
+      radius, 0, Math.PI*2);
   this.shadowTexture.context.fill();
 
   //draw torch light, if torch is on
