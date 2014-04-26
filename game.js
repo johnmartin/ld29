@@ -28,6 +28,10 @@ var lightSprite;
 var lightRadius = 200;
 var mousePointer;
 var spikes;
+var upKey;
+var leftKey;
+var rightKey;
+var downKey;
 
 function create () {
   game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -92,8 +96,11 @@ function create () {
   game.camera.follow(player);
 
   //  Our controls.
+  upKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
+  leftKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
+  downKey = game.input.keyboard.addKey(Phaser.Keyboard.S);
+  rightKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
   cursors = game.input.keyboard.createCursorKeys();
-
 }
 
 function update () {
@@ -103,7 +110,7 @@ function update () {
   //  Checks to see if the player overlaps with any of the spikes, if he does call the hitSpike function
   game.physics.arcade.overlap(player, spikes, hitSpike);
 
-  if (cursors.left.isDown) {
+  if (cursors.left.isDown || leftKey.isDown) {
     // Move to the left
     if (player.body.velocity.x > -playerTopSpeed) {
       player.body.velocity.x -= playerAccel;
@@ -112,7 +119,7 @@ function update () {
     }
     player.animations.play('move-left');
     playerDirection = 'left';
-  } else if (cursors.right.isDown) {
+  } else if (cursors.right.isDown || rightKey.isDown) {
     // Move to the right
     if (player.body.velocity.x < playerTopSpeed) {
       player.body.velocity.x += playerAccel;
@@ -145,7 +152,7 @@ function update () {
     player.body.velocity.y = terminalVelocity;
   }
   //  Allow the player to jump if they are touching the ground.
-  if (cursors.up.isDown && player.body.onFloor()) {
+  if ((cursors.up.isDown || upKey.isDown) && player.body.onFloor()) {
     player.body.velocity.y = -playerJumpStrength;
   }
 
