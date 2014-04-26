@@ -7,6 +7,7 @@ function preload () {
   game.load.image('tiles', 'assets/tiles.png', 112, 32);
   game.load.image('gui', 'assets/gui.png', 800, 24);
   game.load.image('spike', 'assets/spikes.png', 32, 16);
+  game.load.image('battery', 'assets/battery.png', 16, 16);
   game.load.spritesheet('gibs', 'assets/gibs.png', 4, 4);
 }
 
@@ -28,6 +29,7 @@ var lightSprite;
 var lightRadius = 200;
 var mousePointer;
 var spikes;
+var batteries;
 var upKey;
 var leftKey;
 var rightKey;
@@ -62,7 +64,14 @@ function create () {
   spikes.enableBody = true;
   spikes.immovable = true;
   //  And now we convert all of the Tiled objects with an ID of 7 into actual, dangerous sprites within the group spikes
-  map.createFromObjects('Spikes', 10, 'spike', 7, true, false, spikes);
+  map.createFromObjects('Objects', 1, 'spike', 0, true, false, spikes);
+
+  // Create Batteries!
+  batteries = game.add.group();
+  batteries.enableBody = true;
+  batteries.immovable = true;
+  //  And now we convert all of the Tiled objects with an ID of 7 into actual, dangerous sprites within the group spikes
+  map.createFromObjects('Objects', 2, 'battery', 0, true, false, batteries);
 
   // Light and shadow stuff
   // Create the shadow texture
