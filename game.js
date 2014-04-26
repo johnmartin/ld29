@@ -6,7 +6,7 @@ function preload () {
   game.load.image('bg', 'assets/bg.png', 800, 600);
   game.load.image('tiles', 'assets/tiles.png', 112, 32);
   game.load.image('gui', 'assets/gui.png', 800, 24);
-  game.load.image('spike', 'assets/spike.png', 32, 32);
+  game.load.image('spike', 'assets/spikes.png', 32, 16);
   game.load.spritesheet('gibs', 'assets/gibs.png', 4, 4);
 }
 
@@ -52,6 +52,14 @@ function create () {
   // Add the mouse pointer
   mousePointer = this.game.add.sprite(this.game.width/2, this.game.height/2);
 
+  // Create Spikes!
+  spikes = game.add.group();
+  // spikes.debug = true;
+  spikes.enableBody = true;
+  spikes.immovable = true;
+  //  And now we convert all of the Tiled objects with an ID of 7 into actual, dangerous sprites within the group spikes
+  map.createFromObjects('Spikes', 10, 'spike', 7, true, false, spikes);
+
   // Light and shadow stuff
   // Create the shadow texture
   shadowTexture = game.add.bitmapData(4*game.width, 4*game.height);
@@ -60,14 +68,6 @@ function create () {
   // Set the blend mode to MULTIPLY. This will darken the colors of
   // everything below this sprite.
   lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
-
-  // Create Spikes!
-  spikes = game.add.group();
-  // spikes.debug = true;
-  spikes.enableBody = true;
-  spikes.immovable = true;
-  //  And now we convert all of the Tiled objects with an ID of 7 into actual, dangerous sprites within the group spikes
-  map.createFromObjects('Spikes', 10, null, 7, true, false, spikes);
 
   // The player and its settings
   player = game.add.sprite(700, 400, 'dude');
