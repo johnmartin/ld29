@@ -41,6 +41,19 @@ function create () {
   // layer.debug = true;
   layer.resizeWorld();
 
+  // Add the mouse pointer
+  mousePointer = this.game.add.sprite(this.game.width/2, this.game.height/2);
+
+  // Create the shadow texture
+  shadowTexture = game.add.bitmapData(4*game.width, 4*game.height);
+
+  // Create an object that will use the bitmap as a texture
+  lightSprite = game.add.image(0, 0, shadowTexture);
+
+  // Set the blend mode to MULTIPLY. This will darken the colors of
+  // everything below this sprite.
+  lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
+
   // The player and its settings
   player = game.add.sprite(100, 100, 'dude');
   player.name = 'dude';
@@ -58,26 +71,13 @@ function create () {
   player.body.linearDamping = 1;
   player.body.collideWorldBounds = true;
 
-  //  Our controls.
-  cursors = game.input.keyboard.createCursorKeys();
+  gui = game.add.tileSprite(10, 10, 776, 24, 'gui');
+  gui.fixedToCamera = true;
 
   game.camera.follow(player);
 
-  // Add the mouse pointer
-  mousePointer = this.game.add.sprite(this.game.width/2, this.game.height/2);
-
-  // Create the shadow texture
-  shadowTexture = game.add.bitmapData(4*game.width, 4*game.height);
-
-  // Create an object that will use the bitmap as a texture
-  lightSprite = game.add.image(0, 0, shadowTexture);
-
-  // Set the blend mode to MULTIPLY. This will darken the colors of
-  // everything below this sprite.
-  lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
-
-  gui = game.add.tileSprite(10, 10, 776, 24, 'gui');
-  gui.fixedToCamera = true;
+  //  Our controls.
+  cursors = game.input.keyboard.createCursorKeys();
 
 }
 
