@@ -14,6 +14,7 @@ var playerAccel = 60;
 var playerDecel = 60;
 var playerJumpStrength = 460;
 var gravity = 1200;
+var terminalVelocity = 2000;
 
 function create () {
   game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -85,6 +86,10 @@ function update () {
     }
   }
 
+  //update vertical movement based on terminal velocty - don't fall too fast!
+  if (player.body.velocity.y > terminalVelocity){
+    player.body.velocity.y = terminalVelocity;
+  }
   //  Allow the player to jump if they are touching the ground.
   if (cursors.up.isDown && player.body.onFloor()) {
     player.body.velocity.y = -playerJumpStrength;
