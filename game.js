@@ -124,6 +124,7 @@ function update () {
 
   //  Checks to see if the player overlaps with any of the spikes, if he does call the hitSpike function
   game.physics.arcade.overlap(player, spikes, hitSpike);
+  game.physics.arcade.overlap(player, batteries, hitBattery);
 
   if (cursors.left.isDown || leftKey.isDown) {
     // Move to the left
@@ -194,6 +195,13 @@ function hitSpike (player, spike) {
     player.kill();
     playerGibby();
     console.log("R.I.P. the player");
+}
+
+//when the player hits a battery...
+function hitBattery(player, battery){
+  battery.kill();
+  batteryLife += 1000;
+  torchOn = true;
 }
 
 
