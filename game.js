@@ -34,6 +34,8 @@ var upKey;
 var leftKey;
 var rightKey;
 var downKey;
+var batteryLife;
+var torchOn;
 
 function create () {
   game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -97,6 +99,10 @@ function create () {
   player.body.bounce.y = 0.2;
   player.body.linearDamping = 1;
   player.body.collideWorldBounds = true;
+
+  // torch stuff;
+  batteryLife = 2000;
+  torchOn = true;
 
   // Create the GUI
   gui = game.add.tileSprite(10, 10, 776, 24, 'gui');
@@ -165,6 +171,14 @@ function update () {
     player.body.velocity.y = -playerJumpStrength;
   }
 
+
+  // update torch battery
+  if(batteryLife > 0){
+    batteryLife--;
+  } else {
+    torchOn = false;
+  }
+
   // Update mouse pointer location
   mousePointer.x = this.game.input.activePointer.worldX;
   mousePointer.y = this.game.input.activePointer.worldY;
@@ -209,14 +223,23 @@ function updateShadowTexture() {
       lightRadius, 0, Math.PI*2);
   this.shadowTexture.context.fill();
 
-
-  var angleToMouse= Math.atan2(mousePointer.y - player.body.y, mousePointer.x - player.body.x);
-  this.shadowTexture.context.beginPath();
-  this.shadowTexture.context.fillStyle = 'rgb(255, 255, 255)';
-  this.shadowTexture.context.arc(2*this.game.width, 2*this.game.height,
-     this.game.width + this.game.height, angleToMouse-Math.PI/8, angleToMouse + Math.PI/8);
-  this.shadowTexture.context.lineTo(2*this.game.width, 2*this.game.height);
-  this.shadowTexture.context.fill();
+  //draw torch light, if torch is on
+  var flicker = false;
+  if(batteryLife <= 1000 && (batteryLife % 200 <  3)){
+    flicker = true;
+  }
+  if (batteryLife < 100 && (batteryLife % 10 < 5)){
+    flicker = true;
+  }
+  if(torchOn && !flicker){
+    var angleToMouse= Math.atan2(mousePointer.y - player.body.y, mousePointer.x - player.body.x);
+    this.shadowTexture.context.beginPath();
+    this.shadowTexture.context.fillStyle = 'rgb(255, 255, 255)';
+    this.shadowTexture.context.arc(2*this.game.width, 2*this.game.height,
+    this.game.width + this.game.height, angleToMouse-Math.PI/8, angleToMouse + Math.PI/8);
+    this.shadowTexture.context.lineTo(2*this.game.width, 2*this.game.height);
+    this.shadowTexture.context.fill();
+  }
 
   lightSprite.x = player.body.x - 2*this.game.width + 6;
   lightSprite.y = player.body.y - 2*this.game.height + 18;
