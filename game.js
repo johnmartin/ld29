@@ -72,6 +72,7 @@ function create () {
   bg = game.add.tileSprite(0, 0, 544, 544, 'bg');
   bg.fixedToCamera = true;
 
+  console.log(map);
   // tileset = game.add.tileset('tiles');
   map.setCollisionBetween(1, 8);
 

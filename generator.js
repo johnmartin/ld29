@@ -2,12 +2,16 @@ function createMap(){
 	console.log("creating map");
 
   
+  var initialArray = createDetailedCavern(50, 50);
 
-  var cavernData = createDetailedCavern(50,50);
-  var linearCavernData = lineariseArray(cavernData);
+  var cavernData = createDecoratedCavern(50,50, initialArray);
 
   var objectLayer = createObjectLayer(50,50,cavernData);
+
+  //add some decoration
+  // cavernyData = addDecoration(50, 50, cavernData);
   
+  var linearCavernData = lineariseArray(cavernData);
 
 	var jsonObject = { "height":50,
 	 "layers":[
@@ -35,8 +39,8 @@ function createMap(){
 	        {
 	         "firstgid":1,
 	         "image":"tiles.png",
-	         "imageheight":32,
-	         "imagewidth":224,
+	         "imageheight":128,
+	         "imagewidth":256,
 	         "margin":0,
 	         "name":"tiles",
 	         "properties":
@@ -94,10 +98,11 @@ function createObjectLayer(cavernWidth, cavernHeight, cavernArray){
             "visible":true,
             "width":16,
             "x":j*32,
-            "y":(i+1)*32
+            "y":(i+2)*32
           };
           objectLayer.objects.push(newBatteryObject);
         } else if (cavernArray[i][j] == 0 && cavernArray[i+1][j] != 0){
+          // object is on floor!
           num = getRandomInt(1,100);
           if (num < 20){
             var newSpikeObject = {
@@ -111,15 +116,14 @@ function createObjectLayer(cavernWidth, cavernHeight, cavernArray){
               "visible":true,
               "width":32,
               "x":(j*32),
-              "y":((i+1)*32)
+              "y":((i+2)*32)
             };
             objectLayer.objects.push(newSpikeObject);
-          }
+          } 
         }
       } 
     }
   }
-  
   return objectLayer;
 }
 
@@ -150,6 +154,61 @@ function lineariseArray(initialArray){
   return linearArray;
 }
 
+
+function createDecoratedCavern(cavernWidth, cavernHeight, initialArray){
+  var val;
+  var vali;
+  var num;
+  var cavernArray = new Array();
+  for (var i = 0; i < cavernHeight; i++){
+    cavernArray[i]=new Array();
+    for (var j = 0; j < cavernWidth; j++){
+      val = initialArray[i][j];
+      if (i == cavernHeight-1){
+        cavernArray[i][j] = val;    
+      } else {
+        vali = initialArray[i+1][j];
+        if (val==0 && vali != 0){
+          num = getRandomInt(1,100);
+          if (num < 40){
+            num = getRandomInt(25,32);
+            cavernArray[i][j] = num;
+          } else {
+            cavernArray[i][j] = val;
+          }
+        } else {
+        cavernArray[i][j] = val;
+        }
+      }
+    }
+  }
+  return cavernArray;
+}
+
+        // val = initialArray[i][j];
+        // if (i < cavernHeight -1 ){
+        //   val2 = initialArray[i+1][j];
+        // } else {
+        //   val2 = val;
+        // }
+        // if (val != 0){
+        //   cavernArray[i][j] = val;
+        // } else if (val2 != 0){
+        //   num = getRandomInt(1,100);
+        //   if (num < 40){
+        //     num = getRandomInt(25,32);
+        //     cavernArray[i][j] = num;
+        //     console.log("howdy");
+        //   } else {
+        //     cavernArray[i][j] = 0;
+        //   }
+        // } else {
+        //   cavernArray[i][j] = 0;
+        // }
+
+
+
+
 // create a cavern with randomised tiles and grass on top
 function createDetailedCavern(cavernWidth, cavernHeight){
   var cavernArray = new Array();
@@ -160,9 +219,9 @@ function createDetailedCavern(cavernWidth, cavernHeight){
         if (initialArray[i][j] == 0){
           cavernArray[i][j] = 0;
         } else if (i >0 && initialArray[i-1][j] == 0){
-           cavernArray[i][j] = getRandomInt(4,6);
+           cavernArray[i][j] =  getRandomInt(5,8);
         } else {
-           cavernArray[i][j] = getRandomInt(1,3);
+           cavernArray[i][j] = getRandomInt(1,4);
         }
       }
     }
