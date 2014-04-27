@@ -1,6 +1,6 @@
 var game = new Phaser.Game(544, 544, Phaser.AUTO, 'game', { preload: preload, create: create, update: update, render: render }, false, false);
 
-var amIProcedural = false;
+var amIProcedural = true;
 
 function preload () {
   if (!amIProcedural){
@@ -39,6 +39,7 @@ var upKey;
 var leftKey;
 var rightKey;
 var downKey;
+var jumpJustPressed;
 var batteryLife;
 var batteryMax = 2000;
 var health = 100;
@@ -149,6 +150,7 @@ function create () {
   rightKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
   restartKey = game.input.keyboard.addKey(Phaser.Keyboard.T);
   cursors = game.input.keyboard.createCursorKeys();
+  jumpJustPressed = false;
 }
 
 function update () {
@@ -203,9 +205,20 @@ function update () {
     player.body.velocity.y = terminalVelocity;
   }
   //  Allow the player to jump if they are touching the ground.
-  if ((cursors.up.isDown || upKey.isDown) &&  (player.body.touching.down || player.body.onFloor())) {
-    player.body.velocity.y = -playerJumpStrength;
+  if (cursors.up.isDown || upKey.isDown){
+    if (player.body.touching.down || player.body.onFloor()){
+      player.body.velocity.y = -playerJumpStrength;
+    } else if (!jumpJustPressed && batteryLife > 0){
+      // double jump!
+      player.body.velocity.y = -playerJumpStrength;
+      batteryLife -= 200;
+    }
   }
+
+
+  //update 'jumpJustPressed' flag;
+  jumpJustPressed = (cursors.up.isDown || upKey.isDown);
+
 
   if (!player.body.onFloor()) {
     animation = 'jump';
@@ -217,6 +230,7 @@ function update () {
   if (batteryLife > 0) {
     batteryLife--;
   } else {
+    batteryLife = 0;
     torchOn = false;
   }
 
