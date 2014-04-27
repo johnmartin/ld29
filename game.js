@@ -59,7 +59,7 @@ function create () {
   bg.fixedToCamera = true;
 
   // tileset = game.add.tileset('tiles');
-  map.setCollisionBetween(1, 6);
+  map.setCollisionBetween(1, 15);
 
   layer = map.createLayer('Tiles');
   // layer.debug = true;
@@ -78,14 +78,14 @@ function create () {
   spikes.enableBody = true;
   spikes.immovable = true;
   //  And now we convert all of the Tiled objects with an ID of 7 into actual, dangerous sprites within the group spikes
-  map.createFromObjects('Objects', 1, 'spike', 0, true, false, spikes);
+  map.createFromObjects('Objects', 24, 'spike', 0, true, false, spikes);
 
   // Create Batteries!
   batteries = game.add.group();
   batteries.enableBody = true;
   batteries.immovable = true;
   //  And now we convert all of the Tiled objects with an ID of 7 into actual, dangerous sprites within the group spikes
-  map.createFromObjects('Objects', 2, 'battery', 0, true, false, batteries);
+  map.createFromObjects('Objects', 16, 'battery', 0, true, false, batteries);
 
   // Light and shadow stuff
   // Create the shadow texture
