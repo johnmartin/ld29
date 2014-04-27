@@ -161,8 +161,107 @@ function createDetailedCavern(cavernWidth, cavernHeight){
   return cavernArray;
 }
 
+// create the undetailed cavern shape: 1 for rock, 0 for not rock.
+// this function and cellularAutomation are based on http://www.roguebasin.com/index.php?title=Cellular_Automata_Method_for_Generating_Random_Cave-Like_Levels
 function createRawCavernNess(cavernWidth, cavernHeight){
-    // intialise array
+  var cavernArray = new Array();
+  for (var i = 0; i < cavernHeight; i++){
+    cavernArray[i]=new Array();
+    for (var j = 0; j < cavernWidth; j++){
+      cavernArray[i][j] = 0;
+    }
+  }
+  var random;
+  var cavernSkeleton = createCavernSkeleton(cavernWidth, cavernHeight);
+  for (var i = 0; i < cavernHeight; i++){
+    for (var j = 0; j < cavernWidth; j++){
+      if(cavernSkeleton[i][j] ==1){
+        cavernArray[i][j] = 1;
+      } else if (cavernSkeleton[i][j] == -1){
+        cavernArray[i][j] = 0;
+      } else {
+        random = getRandomInt(1,20);
+        // 45% chance of rockage
+        if(random < 10){
+          cavernArray[i][j] = 1;
+        } else {
+          cavernArray[i][j] = 0;
+        }
+      }
+    }
+  }
+
+  return cellularAutomation(cavernWidth, cavernHeight, cavernArray, cavernSkeleton, 5);
+}
+
+// Do a cellular automation step - given a weighted array and a skeleton, create an array with 1 if the weight is at least 5 and 0 otherwise
+// (unless the skeleton says otherwise). Then either return that, or update the weighted array and do another iteration.
+// This function and createRawCavernNess are based on http://www.roguebasin.com/index.php?title=Cellular_Automata_Method_for_Generating_Random_Cave-Like_Levels
+function cellularAutomation(cavernWidth, cavernHeight, cavernArray, cavernSkeleton, iterations){
+  if (iterations <= 0){
+    return cavernArray;
+  } else {
+    var weightedArray = new Array();
+    var otherWeightedArray = new Array();
+    weightedArray = new Array();
+    for (var i = 0; i < cavernHeight; i++){
+      weightedArray[i]=new Array();
+      for (var j = 0; j < cavernWidth; j++){
+        weightedArray[i][j] = 0;
+      }
+    }
+    otherWeightedArray = new Array();
+    for (var i = 0; i < cavernHeight; i++){
+      otherWeightedArray[i]=new Array();
+      for (var j = 0; j < cavernWidth; j++){
+        otherWeightedArray[i][j] = 0;
+      }
+    }
+    // the good news about having that big border in cavernSkeleton is that we don't have to check edge cases, we can just start from
+    // one layer in. TODO: remember this for the future when you start letting caves go off the edge of the map and the level generation
+    // gets all weird.
+    for (var i = 1; i < cavernHeight-1; i++){
+      for (var j = 1; j < cavernWidth-1; j++){
+        weightedArray[i][j] = cavernArray[i-1][j-1] + cavernArray[i-1][j] + cavernArray[i-1][j+1] + cavernArray[i][j-1] + cavernArray[i][j] + cavernArray[i][j+1] + cavernArray[i+1][j-1] + cavernArray[i+1][j] + cavernArray[i+1][j+1];
+      }
+    }
+    for (var i = 2; i < cavernHeight-2; i++){
+      otherWeightedArray[i] = new Array();
+      for (var j = 2; j < cavernWidth-2; j++){
+        otherWeightedArray[i][j] = cavernArray[i-2][j-2] + cavernArray[i-2][j-1] +cavernArray[i-2][j] +cavernArray[i-2][j+1] +cavernArray[i-2][j+2] +
+        cavernArray[i-1][j-2] + cavernArray[i-1][j-1] + cavernArray[i-1][j] + cavernArray[i-1][j+1] + cavernArray[i-1][j+2] +
+        cavernArray[i][j-2] + cavernArray[i][j-1] + cavernArray[i][j] + cavernArray[i][j+1] + cavernArray[i][j+2] +
+        cavernArray[i+1][j-2] + cavernArray[i+1][j-1] + cavernArray[i+1][j] + cavernArray[i+1][j+1] + cavernArray[i+1][j+2] + 
+        cavernArray[i+2][j-2] + cavernArray[i+2][j-1] + cavernArray[i+2][j] + cavernArray[i+2][j+1] + cavernArray[i+2][j+2];
+      }
+    }
+
+    //now update cavernArray so that cells are set to 1 if their weighting is at least 5  or the other weighting is 0;
+    // set them to 0 otherwise (unless they're in the skeleton)
+    for (var i = 0; i < cavernHeight; i++){
+     for (var j = 0; j < cavernWidth; j++){
+       if(cavernSkeleton[i][j] ==1){
+         cavernArray[i][j] = 1;
+        } else if (cavernSkeleton[i][j] == -1){
+          cavernArray[i][j] = 0;
+        } else {
+          // update based on weightedArray and otherWeightedArray
+          if(weightedArray[i][j] < 5 && otherWeightedArray[i][j] > 0){
+            cavernArray[i][j] = 0;
+          } else {
+            cavernArray[i][j] = 1;
+          }
+        }
+      }
+    } 
+    iterations--;
+    return cellularAutomation(cavernWidth, cavernHeight, cavernArray, cavernSkeleton, iterations);
+  }
+}
+
+// returns an array giving the parts of the cavern that are definitely going to be rock (1) or space (-1).
+// These parts will never change during the celular automota phase.
+function createCavernSkeleton(cavernWidth, cavernHeight){    // intialise array
   var cavernArray = new Array();
   for (var i = 0; i < cavernHeight; i++){
     cavernArray[i]=new Array();
