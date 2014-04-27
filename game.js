@@ -1,6 +1,6 @@
 var game = new Phaser.Game(544, 544, Phaser.AUTO, 'game', { preload: preload, create: create, update: update, render: render }, false, false);
 
-var amIProcedural = false;
+var amIProcedural = true;
 
 function preload () {
   if (!amIProcedural){
@@ -31,8 +31,8 @@ var bg;
 var gui;
 var playerDirection = 'right';
 var playerTopSpeed = 300;
-var playerAccel = 60;
-var playerDecel = 60;
+var playerAccel = 100;
+var playerDecel = 200;
 var playerJumpStrength = 460;
 var playerGibs;
 var gravity = 1200;
@@ -152,7 +152,7 @@ function create () {
   player.body.gravity.y = gravity;
 
   player.body.setSize(12, 24, 6, 0);
-  player.body.bounce.y = 0.2;
+  // player.body.bounce.y = 0.2;
   player.body.linearDamping = 1;
   player.body.collideWorldBounds = true;
 
@@ -278,10 +278,23 @@ function update () {
 
 }
 
+
+function restartLevel(){
+  initialiseLevel();
+}
+
+function nextLevel(){
+  initiaiseLevel();
+}
+
 // everything that happens at the start of the game and every time you restart
 // goes here
 function initialiseLevel () {
 
+}
+
+// get rid of map, enemies etc when we are leaving / restarting the level
+function destroyCurrentLevel(){
 
 }
 
