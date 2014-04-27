@@ -44,6 +44,7 @@ var batteryMax = 2000;
 var health = 100;
 var healthMax = 100;
 var torchOn;
+// var floors; // group of stationary objects that can be stood on but don't count as an obstacle froor things moving from below or the side.
 
 function create () {
   game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -59,7 +60,7 @@ function create () {
   bg.fixedToCamera = true;
 
   // tileset = game.add.tileset('tiles');
-  map.setCollisionBetween(1, 15);
+  map.setCollisionBetween(1, 8);
 
   layer = map.createLayer('Tiles');
   // layer.debug = true;
@@ -86,6 +87,23 @@ function create () {
   batteries.immovable = true;
   //  And now we convert all of the Tiled objects with an ID of 7 into actual, dangerous sprites within the group spikes
   map.createFromObjects('Objects', 16, 'battery', 0, true, false, batteries);
+
+  // Create floors!
+  // floors = game.add.group();
+  // floors.enableBody = true;
+  // map.createFromObjects('Objects', 13, 'crate', 0, true, false, floors);
+  // map.createFromObjects('Objects', 14, 'crate', 0, true, false, floors);
+  // map.createFromObjects('Objects', 15, 'crate', 0, true, false, floors);
+  // console.log(floors);
+  // // make the floors act like floors
+  // for (var i = 0; i < floors.length; i++){
+  //   // floors.getAt(i).body.immovable = true;
+  //   // floors.getAt(i).body.checkCollision.up = false;
+  //   floors.getAt(i).body.checkCollision.down = false;
+  //   floors.getAt(i).body.checkCollision.left = false;
+  //   floors.getAt(i).body.checkCollision.right = false;
+  // }
+  // floors.immovable = true;
 
   // Light and shadow stuff
   // Create the shadow texture
@@ -134,6 +152,8 @@ function create () {
 function update () {
   game.physics.arcade.collide(player, layer);
   game.physics.arcade.collide(playerGibs, layer);
+  // game.physics.arcade.collide(player, floors);
+  // game.physics.arcade.collide(playerGibs, floors);
 
   //  Checks to see if the player overlaps with any of the spikes, if he does call the hitSpike function
   game.physics.arcade.overlap(player, spikes, hitSpike);
@@ -181,7 +201,7 @@ function update () {
     player.body.velocity.y = terminalVelocity;
   }
   //  Allow the player to jump if they are touching the ground.
-  if ((cursors.up.isDown || upKey.isDown) && player.body.onFloor()) {
+  if ((cursors.up.isDown || upKey.isDown) &&  (player.body.touching.down || player.body.onFloor())) {
     player.body.velocity.y = -playerJumpStrength;
   }
 
