@@ -117,9 +117,11 @@ function create () {
   // The player and its settings
   player = game.add.sprite(700, 400, 'dude');
   player.animations.add('idle-right', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 5);
-  player.animations.add('idle-left', [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5], 5);
+  player.animations.add('idle-left', [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6], 5);
   player.animations.add('move-right', [2, 3], 10);
-  player.animations.add('move-left', [6, 7], 10);
+  player.animations.add('move-left', [7, 8], 10);
+  player.animations.add('jump-right', [4], 10);
+  player.animations.add('jump-left', [9], 10);
   game.physics.enable(player);
   player.body.gravity.y = gravity;
 
@@ -163,6 +165,8 @@ function update () {
     initialiseLevel();
   }
 
+  var animation = 'idle';
+
   if (cursors.left.isDown || leftKey.isDown) {
     // Move to the left
     if (player.body.velocity.x > -playerTopSpeed) {
@@ -170,7 +174,7 @@ function update () {
     } else {
       player.body.velocity.x = -playerTopSpeed;
     }
-    player.animations.play('move-'+playerDirection);
+    animation = 'move';
   } else if (cursors.right.isDown || rightKey.isDown) {
     // Move to the right
     if (player.body.velocity.x < playerTopSpeed) {
@@ -178,21 +182,20 @@ function update () {
     } else {
       player.body.velocity.x = playerTopSpeed;
     }
-    player.animations.play('move-'+playerDirection);
+    animation = 'move';
+    // player.animations.play('move-'+playerDirection);
   } else {
     // Stand still
     if (player.body.velocity.x > playerDecel) {
       // slow down movement to right
       player.body.velocity.x -= playerDecel;
-      player.animations.play('move-'+playerDirection);
+      animation = 'move';
     } else if (player.body.velocity.x < -playerDecel) {
       // slow down movement to left
       player.body.velocity.x += playerDecel;
-      player.animations.play('move-'+playerDirection);
+      animation = 'move';
     } else {
       player.body.velocity.x = 0;
-      //  Stand still
-      player.animations.play('idle-'+playerDirection);
     }
   }
 
@@ -205,6 +208,11 @@ function update () {
     player.body.velocity.y = -playerJumpStrength;
   }
 
+  if (!player.body.onFloor()) {
+    animation = 'jump';
+  }
+
+  player.animations.play(animation+'-'+playerDirection);
 
   // update torch battery
   if (batteryLife > 0) {
