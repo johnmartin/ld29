@@ -108,23 +108,6 @@ function create () {
     }
   }
 
-  // Create floors!
-  // floors = game.add.group();
-  // floors.enableBody = true;
-  // map.createFromObjects('Objects', 13, 'crate', 0, true, false, floors);
-  // map.createFromObjects('Objects', 14, 'crate', 0, true, false, floors);
-  // map.createFromObjects('Objects', 15, 'crate', 0, true, false, floors);
-  // console.log(floors);
-  // // make the floors act like floors
-  // for (var i = 0; i < floors.length; i++){
-  //   // floors.getAt(i).body.immovable = true;
-  //   // floors.getAt(i).body.checkCollision.up = false;
-  //   floors.getAt(i).body.checkCollision.down = false;
-  //   floors.getAt(i).body.checkCollision.left = false;
-  //   floors.getAt(i).body.checkCollision.right = false;
-  // }
-  // floors.immovable = true;
-
   // Light and shadow stuff
   // Create the shadow texture
   shadowTexture = game.add.bitmapData(4*game.width, 4*game.height);

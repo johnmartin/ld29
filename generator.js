@@ -1,29 +1,31 @@
 function createMap(){
 	console.log("creating map");
 
+  var cavernWidth = 50;
+  var cavernHeight = 50;
   
-  var initialArray = createDetailedCavern(50, 50);
+  var initialArray = createDetailedCavern(cavernWidth, cavernHeight);
 
-  var cavernData = createDecoratedCavern(50,50, initialArray);
+  var cavernData = createDecoratedCavern(cavernWidth, cavernHeight, initialArray);
 
-  var objectLayer = createObjectLayer(50,50,cavernData);
+  var objectLayer = createObjectLayer(cavernWidth, cavernHeight,cavernData);
 
   //add some decoration
   // cavernyData = addDecoration(50, 50, cavernData);
   
   var linearCavernData = lineariseArray(cavernData);
 
-	var jsonObject = { "height":50,
+	var jsonObject = { "height":cavernHeight,
 	 "layers":[
   	      {
     	     "data": linearCavernData,
            // [1, 2, 3, 1, 1, 3, 2, 2, 1, 1, 2, 2, 1, 1, 3, 3, 2, 2, 1, 2, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 3, 2, 3, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 3, 1, 1, 3, 1, 3, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 3, 3, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 1, 1, 1, 0, 0, 2, 2, 3, 3, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 2, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 6, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 6, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 1, 3, 3, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 2, 1, 2, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 1, 1, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 7, 4, 4, 3, 3, 2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 1, 6, 1, 2, 1, 2, 1, 3, 1, 1, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 6, 6, 6, 4, 6, 6, 3, 1, 1, 2, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 3, 3, 2, 1, 1, 2, 3, 3, 3, 2, 1, 1, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 3, 3, 3, 1, 1, 0, 0, 0, 0, 0, 0, 0, 3, 1, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 0, 0, 0, 0, 5, 5, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 6, 2, 1, 0, 0, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 6, 1, 1, 2, 1, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 1, 1, 2, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 6, 3, 1, 2, 3, 1, 1, 1, 6, 5, 5, 6, 5, 5, 5, 5, 6, 6, 5, 6, 6, 5, 4, 6, 5, 5, 5, 5, 2, 3, 1, 1, 1, 2, 3, 1, 2],
-      	   "height":50,
+      	   "height":cavernHeight,
         	 "name":"Tiles",
         	 "opacity":1,
         	 "type":"tilelayer",
         	 "visible":true,
-        	 "width":50,
+        	 "width":cavernWidth,
         	 "x":0,
         	 "y":0
    	     },
@@ -53,7 +55,7 @@ function createMap(){
   	      }],
  	  "tilewidth":32,
     "version":1,
-    "width":50
+    "width":cavernWidth
 	};
   // jsonObject.versionzz = 1;
   // jsonObject.tilesets.push({"foo":"bar", "brong":32});
@@ -185,26 +187,6 @@ function createDecoratedCavern(cavernWidth, cavernHeight, initialArray){
   return cavernArray;
 }
 
-        // val = initialArray[i][j];
-        // if (i < cavernHeight -1 ){
-        //   val2 = initialArray[i+1][j];
-        // } else {
-        //   val2 = val;
-        // }
-        // if (val != 0){
-        //   cavernArray[i][j] = val;
-        // } else if (val2 != 0){
-        //   num = getRandomInt(1,100);
-        //   if (num < 40){
-        //     num = getRandomInt(25,32);
-        //     cavernArray[i][j] = num;
-        //     console.log("howdy");
-        //   } else {
-        //     cavernArray[i][j] = 0;
-        //   }
-        // } else {
-        //   cavernArray[i][j] = 0;
-        // }
 
 
 
@@ -355,10 +337,54 @@ function createCavernSkeleton(cavernWidth, cavernHeight){    // intialise array
       cavernArray[i][j] = 1;
     }
   }
+  // draw some extra barriers so it's not just a big cave
+  for (var j = 0; j < cavernWidth - 20; j++){
+    cavernArray[20][j] = 1;
+  }
+  for (var j = 20; j < cavernWidth; j++){
+    cavernArray[30][j] = 1;
+  }
+
+
+  // now draw a wigglly route corresponding that will have to stay clear
+  for (var j = 5; j < cavernWidth - 25; j++){
+    cavernArray[15][j] = -1;
+  }
+  for (var j = 25; j < cavernWidth-5; j++){
+    cavernArray[35][j] = -1;
+  }
+  for (var j = 5; j < cavernWidth - 25; j++){
+    cavernArray[14][j] = -1;
+  }
+  for (var i = 0; i < 15; i++){
+    cavernArray[i][15] = -1;
+  }
+  for (var i = 15; i < 25; i++){
+    cavernArray[i][cavernWidth-25] = -1;
+  }
+  for (var i = 25; i < 35; i++){
+    cavernArray[i][25] = -1;
+  }
   //That's it!
   return cavernArray;
 }
 
+
+
+// // creates a spanning tree of a grid
+// function randomGridTree(gridWidth, gridHeight){
+//   var gridTree;
+//   var connectedArray = new Array();
+//   var[0] = 
+//   for (var h = 1, var h < gridWidth * gridgHeight; h++){
+
+//   }
+// }
+
+// // checks whether two points are connected in a subgraph of a grid
+// function checkConnected(pointA, pointB, gridGraph){
+
+// }
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
