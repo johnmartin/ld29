@@ -8,7 +8,8 @@ function createMap(){
 
   var cavernData = createDecoratedCavern(cavernWidth, cavernHeight, initialArray);
 
-  var objectLayer = createObjectLayer(cavernWidth, cavernHeight,cavernData);
+  var entitiesLayer = createEntitiesLayer(cavernWidth, cavernHeight,cavernData);
+  var enemiesLayer = createEnemiesLayer(cavernWidth, cavernHeight,cavernData);
 
   //add some decoration
   // cavernyData = addDecoration(50, 50, cavernData);
@@ -27,10 +28,11 @@ function createMap(){
         	 "visible":true,
         	 "width":cavernWidth,
         	 "x":0,
-        	 "y":0
-   	     },
-        objectLayer
-         ],
+           "y":0
+   	      },
+        entitiesLayer,
+        enemiesLayer
+        ],
  	  "orientation":"orthogonal",
  	  "properties":
  	   {
@@ -68,17 +70,17 @@ function createMap(){
 
 // creates a json object containing all the fun stuff like spikes and bateries, 
 // based on cavern data
-function createObjectLayer(cavernWidth, cavernHeight, cavernArray){
+function createEntitiesLayer(cavernWidth, cavernHeight, cavernArray){
   // the JSON object where all the exciting stuff lives!
-   var objectLayer = 
+   var entitiesLayer = 
   {
-    "height":50,
-    "name":"Objects",
+    "height":cavernHeight,
+    "name":"Entities",
     "objects":[],
     "opacity":1,
     "type":"objectgroup",
     "visible":true,
-    "width":50,
+    "width":cavernWidth,
     "x":0,
     "y":0
    };
@@ -102,7 +104,7 @@ function createObjectLayer(cavernWidth, cavernHeight, cavernArray){
             "x":j*32,
             "y":(i+2)*32
           };
-          objectLayer.objects.push(newBatteryObject);
+          entitiesLayer.objects.push(newBatteryObject);
         } else if (cavernArray[i][j] == 0 && cavernArray[i+1][j] != 0){
           // object is on floor!
           num = getRandomInt(1,100);
@@ -120,13 +122,50 @@ function createObjectLayer(cavernWidth, cavernHeight, cavernArray){
               "x":(j*32),
               "y":((i+2)*32)
             };
-            objectLayer.objects.push(newSpikeObject);
+            entitiesLayer.objects.push(newSpikeObject);
           } 
         }
       } 
     }
   }
-  return objectLayer;
+  return entitiesLayer;
+}
+
+function createEnemiesLayer(cavernWidth, cavernHeight, cavernArray){
+  var enemiesLayer = {
+    "height":cavernHeight,
+    "name":"Enemies",
+    "objects":[],
+    "opacity":1,
+    "type":"objectgroup",
+    "visible":true,
+    "width":cavernWidth,
+    "x":0,
+    "y":0
+    }
+  var num;
+  for (var i = 0; i < cavernHeight-1; i++){
+    for(var j = 0; j < cavernWidth; j++){
+      if (cavernArray[i][j] == 0 && cavernArray[i+1][j] != 0){
+        num = getRandomInt(1,100);
+        if (num < 10){
+          var newSlimeObject = {
+            "gid":21,
+            "height":8,
+            "name":"",
+            "properties": {},
+            "type":"slime",
+            "visible":true,
+            "width":20,
+            "x":(j*32),
+            "y":((i+1)*32)
+          };
+          enemiesLayer.objects.push(newSlimeObject);
+        }
+      }
+    }
+  }
+  return enemiesLayer;
 }
 
 

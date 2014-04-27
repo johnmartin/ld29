@@ -1,6 +1,6 @@
 var game = new Phaser.Game(544, 544, Phaser.AUTO, 'game', { preload: preload, create: create, update: update }, false, false);
 
-var amIProcedural = false;
+var amIProcedural = true;
 
 function preload () {
   if (!amIProcedural){
