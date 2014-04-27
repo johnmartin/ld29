@@ -13,7 +13,16 @@ function preload () {
   game.load.image('spike', 'assets/spikes.png', 32, 16);
   game.load.image('battery', 'assets/battery.png', 16, 16);
   game.load.spritesheet('gibs', 'assets/gibs.png', 4, 4);
+  game.load.spritesheet('slime-gibs', 'assets/slime-gibs.png', 4, 4);
+  game.load.spritesheet('slime', 'assets/slime.png', 20, 8);
+
 }
+
+var GID = {
+  SPIKE: 24,
+  BATTERY: 16,
+  SLIME: 21
+};
 
 var map;
 var layer;
@@ -45,6 +54,9 @@ var batteryMax = 2000;
 var health = 100;
 var healthMax = 100;
 var torchOn;
+
+var enemies = [];
+
 // var floors; // group of stationary objects that can be stood on but don't count as an obstacle froor things moving from below or the side.
 
 function create () {
@@ -80,14 +92,26 @@ function create () {
   spikes.enableBody = true;
   spikes.immovable = true;
   //  And now we convert all of the Tiled objects with an ID of 7 into actual, dangerous sprites within the group spikes
-  map.createFromObjects('Objects', 24, 'spike', 0, true, false, spikes);
+  map.createFromObjects('Objects', GID.SPIKE, 'spike', 0, true, false, spikes);
 
   // Create Batteries!
   batteries = game.add.group();
   batteries.enableBody = true;
   batteries.immovable = true;
   //  And now we convert all of the Tiled objects with an ID of 7 into actual, dangerous sprites within the group spikes
-  map.createFromObjects('Objects', 16, 'battery', 0, true, false, batteries);
+  map.createFromObjects('Objects', GID.BATTERY, 'battery', 0, true, false, batteries);
+
+  enemies = [];
+  // Do the objects
+  for (var i = 0; i < map.objects.Objects.length; i++) {
+    var object = map.objects.Objects[i];
+    if (object.gid == GID.SLIME) {
+      // Create Slime!
+      enemies.push(new EnemySlime(i, object, game, player));
+    } else {
+      enemies.push({ alive: false });
+    }
+  }
 
   // Create floors!
   // floors = game.add.group();
@@ -116,7 +140,7 @@ function create () {
   lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
 
   // The player and its settings
-  player = game.add.sprite(700, 400, 'dude');
+  player = game.add.sprite(700, 510, 'dude');
   player.animations.add('idle-right', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 5);
   player.animations.add('idle-left', [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6], 5);
   player.animations.add('move-right', [2, 3], 10);
@@ -156,12 +180,19 @@ function create () {
 function update () {
   game.physics.arcade.collide(player, layer);
   game.physics.arcade.collide(playerGibs, layer);
-  // game.physics.arcade.collide(player, floors);
-  // game.physics.arcade.collide(playerGibs, floors);
 
   //  Checks to see if the player overlaps with any of the spikes, if he does call the hitSpike function
   game.physics.arcade.overlap(player, spikes, hitSpike);
   game.physics.arcade.overlap(player, batteries, hitBattery);
+
+  // Enemies?
+  for (var i = 0; i < enemies.length; i++) {
+    if (enemies[i].alive) {
+      // game.physics.arcade.collide(player, enemies[i].sprite);
+      game.physics.arcade.overlap(player, enemies[i].sprite, hitEnemy);
+      enemies[i].update();
+    }
+  }
 
   if (restartKey.isDown) {
     initialiseLevel();
@@ -271,7 +302,9 @@ function hitBattery (player, battery) {
   torchOn = true;
 }
 
-
+function hitEnemy (player, enemy) {
+  enemies[enemy.name].hit();
+}
 
 function updateShadowTexture () {
   // This function updates the shadow texture (shadowTexture).
