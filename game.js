@@ -1,5 +1,7 @@
 var game = new Phaser.Game(544, 544, Phaser.AUTO, 'game', { preload: preload, create: create, update: update, render: render }, false, false);
 
+
+var temptimeout;
 var amIProcedural = false;
 
 function preload () {
@@ -150,8 +152,7 @@ function update () {
     } else {
       player.body.velocity.x = -playerTopSpeed;
     }
-    player.animations.play('move-left');
-    playerDirection = 'left';
+    player.animations.play('move-'+playerDirection);
   } else if (cursors.right.isDown || rightKey.isDown) {
     // Move to the right
     if (player.body.velocity.x < playerTopSpeed) {
@@ -159,20 +160,17 @@ function update () {
     } else {
       player.body.velocity.x = playerTopSpeed;
     }
-    player.animations.play('move-right');
-    playerDirection = 'right';
+    player.animations.play('move-'+playerDirection);
   } else {
     // Stand still
     if (player.body.velocity.x > playerDecel) {
       // slow down movement to right
       player.body.velocity.x -= playerDecel;
-      player.animations.play('move-right');
-      playerDirection = 'right';
+      player.animations.play('move-'+playerDirection);
     } else if (player.body.velocity.x < -playerDecel) {
       // slow down movement to left
       player.body.velocity.x += playerDecel;
-      player.animations.play('move-left');
-      playerDirection = 'left';
+      player.animations.play('move-'+playerDirection);
     } else {
       player.body.velocity.x = 0;
       //  Stand still
@@ -270,8 +268,15 @@ function updateShadowTexture () {
   if (batteryLife < 100 && (batteryLife % 10 < 5)) {
     flicker = true;
   }
+
+  var angleToMouse = Math.atan2(mousePointer.y - player.body.y, mousePointer.x - player.body.x);
+  if ( angleToMouse > 0-(Math.PI/2) && angleToMouse < Math.PI/2 ) {
+    playerDirection = 'right';
+  } else {
+    playerDirection = 'left';
+  }
+
   if (torchOn && !flicker) {
-    var angleToMouse= Math.atan2(mousePointer.y - player.body.y, mousePointer.x - player.body.x);
     shadowTexture.context.beginPath();
     shadowTexture.context.fillStyle = 'rgb(255, 255, 255)';
     shadowTexture.context.arc(2*game.width, 2*game.height,
