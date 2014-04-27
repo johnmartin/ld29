@@ -4,6 +4,7 @@ var EnemySlime = function (i, object, game, player) {
   this.player = player;
   this.health = 3;
   this.alive = true;
+  this.movingRight = true;
 
   this.sprite = game.add.sprite(object.x, object.y, 'slime');
   this.sprite.name = i.toString();
@@ -13,6 +14,8 @@ var EnemySlime = function (i, object, game, player) {
   this.sprite.body.immovable = false;
   this.sprite.body.collideWorldBounds = true;
   this.sprite.body.linearDamping = 1;
+  this.sprite.body.gravity.y = gravity;
+  this.sprite.body.bounce.x = 0.5;
 
   this.gibs = game.add.emitter(0, 0, 4);
   this.gibs.makeParticles('slime-gibs', [0, 1, 2, 3, 4], 100, true, true);
@@ -36,5 +39,17 @@ EnemySlime.prototype.hit = function() {
 }
 
 EnemySlime.prototype.update = function() {
-  this.sprite.animations.play('move-right');
+  game.physics.arcade.collide(this.sprite, layer);
+  game.physics.arcade.collide(this.gibs, layer);
+  if(this.sprite.body.onWall()){
+    console.log("slime alert!");
+    this.movingRight = !this.movingRight;
+  }
+  if (this.movingRight){
+    this.sprite.animations.play('move-right');
+    this.sprite.body.velocity.x = 20;
+  } else {
+    this.sprite.animations.play('move-left');
+    this.sprite.body.velocity.x = -20;
+  }
 }

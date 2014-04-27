@@ -56,6 +56,9 @@ Player.prototype.hit = function() {
 Player.prototype.update = function(layer) {
   game.physics.arcade.collide(this.sprite, layer);
   game.physics.arcade.collide(this.gibs, layer);
+  if (this.sprite.body.velocity.y > terminalVelocity) {
+    this.sprite.body.velocity.y = terminalVelocity;
+  }
 }
 
 Player.prototype.dead = function() {

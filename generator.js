@@ -160,7 +160,7 @@ function createEnemiesLayer(cavernWidth, cavernHeight, cavernArray){
             "visible":true,
             "width":20,
             "x":(j*32),
-            "y":((i+1)*32 - 16)
+            "y":(i*32 - 16)
           };
           enemiesLayer.objects.push(newSlimeObject);
         }
