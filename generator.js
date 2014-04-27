@@ -1,27 +1,18 @@
 function createMap(){
 	console.log("creating map");
 
-  var testSpikeObject = {
-    "gid":1,
-    "height":16,
-    "name":"",
-    "properties":
-      {
-      },
-    "type":"spike",
-    "visible":true,
-    "width":32,
-    "x":736,
-    "y":512
-    };
+  
 
-  var cavernData = createCavern(50,50);
-  console.log(cavernData);
+  var cavernData = createDetailedCavern(50,50);
+  var linearCavernData = lineariseArray(cavernData);
+
+  var objectLayer = createObjectLayer(50,50,cavernData);
+  
 
 	var jsonObject = { "height":50,
 	 "layers":[
   	      {
-    	     "data": cavernData,
+    	     "data": linearCavernData,
            // [1, 2, 3, 1, 1, 3, 2, 2, 1, 1, 2, 2, 1, 1, 3, 3, 2, 2, 1, 2, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 3, 2, 3, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 3, 1, 1, 3, 1, 3, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 3, 3, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 1, 1, 1, 0, 0, 2, 2, 3, 3, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 2, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 6, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 6, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 1, 3, 3, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 2, 1, 2, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 1, 1, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 7, 4, 4, 3, 3, 2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 1, 6, 1, 2, 1, 2, 1, 3, 1, 1, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 6, 6, 6, 4, 6, 6, 3, 1, 1, 2, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 3, 3, 2, 1, 1, 2, 3, 3, 3, 2, 1, 1, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 3, 3, 3, 1, 1, 0, 0, 0, 0, 0, 0, 0, 3, 1, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 0, 0, 0, 0, 5, 5, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 6, 2, 1, 0, 0, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 6, 1, 1, 2, 1, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 1, 1, 2, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 6, 3, 1, 2, 3, 1, 1, 1, 6, 5, 5, 6, 5, 5, 5, 5, 6, 6, 5, 6, 6, 5, 4, 6, 5, 5, 5, 5, 2, 3, 1, 1, 1, 2, 3, 1, 2],
       	   "height":50,
         	 "name":"Tiles",
@@ -31,82 +22,16 @@ function createMap(){
         	 "width":50,
         	 "x":0,
         	 "y":0
-   	     }, 
-   	     {
-   	      "height":30,
-   	      "name":"Objects",
-   		      "objects":[
-                {
-   	              "gid":1,
-   	              "height":16,
-   	              "name":"",
-   	              "properties":
-   	                 {
-
-                    }	,
-  	               "typ	e":"spike",
- 	                "versionible":true,
-    	             "width"	:32,
-    	             "x":544	,
-    	             "y":640	
-    	            }, 
-    	            {
-    	             "gid":1,
-    	             "height":16,
-    	             "name":"",
-    	             "properties":
-    	                {
-
-	                    },
-	                 "type":"spike",
-	                 "visible":true,
-	                 "width":32,
-	                 "x":576,
-	                 "y":640
-  	              }, 
-    	            {
-    	             "gid":1,
-    	             "height":16,
-    	             "name":"",
-      	           "properties":
-      	              {
-
-      	              },
-      	           "type":"spike",
-      	           "visible":true,
-      	           "width":32,
-      	           "x":640,
-      	           "y":608
-      	          },
-                  testSpikeObject,
-      	          {
-      	           "gid":2,
-      	           "height":16,
-      	           "name":"",
-      	           "properties":
-        	            {
-
-       	             },
-       	          "type":"battery",
-        	         "visible":true,
-        	         "width":16,
-          	       "x":328,
-         	        "y":672
-         	       }],
-         	"opacity":1,
-   	      "type":"objectgroup",
-   	      "visible":true,
-   	      "width":30,
-   	      "x":0,
-   	      "y":0
-   	     }],
- 	"orientation":"orthogonal",
- 	"properties":
+   	     },
+        objectLayer
+         ],
+ 	  "orientation":"orthogonal",
+ 	  "properties":
  	   {
 
     	},
-	 "tileheight":32,
-	 "tilesets":[
+	   "tileheight":32,
+	   "tilesets":[
 	        {
 	         "firstgid":1,
 	         "image":"tiles.png",
@@ -122,24 +47,107 @@ function createMap(){
   	       "tileheight":32,
   	       "tilewidth":32
   	      }],
- 	"tilewidth":32,
- 	"version":1,
- 	"width":50
+ 	  "tilewidth":32,
+    "version":1,
+    "width":50
 	};
+  // jsonObject.versionzz = 1;
+  // jsonObject.tilesets.push({"foo":"bar", "brong":32});
+  console.log(jsonObject);
 	console.log("returning map");
 	return jsonObject;
 }
 
-// create the main cavern data
-function createCavern(cavernWidth, cavernHeight){
-  var cavernArray = new Array();
-  var initialArray = createDetailedCavern(cavernWidth, cavernHeight);
-    for (var i = 0; i < cavernHeight; i++){
-      for (var j = 0; j < cavernWidth; j++){
-        cavernArray[i*cavernWidth + j] = initialArray[i][j];
-      }
+
+
+// creates a json object containing all the fun stuff like spikes and bateries, 
+// based on cavern data
+function createObjectLayer(cavernWidth, cavernHeight, cavernArray){
+  // the JSON object where all the exciting stuff lives!
+   var objectLayer = 
+  {
+    "height":50,
+    "name":"Objects",
+    "objects":[],
+    "opacity":1,
+    "type":"objectgroup",
+    "visible":true,
+    "width":50,
+    "x":0,
+    "y":0
+   };
+  var num;
+  for (var i = 0; i < cavernHeight-1; i++){
+    for(var j = 0; j < cavernWidth; j++){
+      if (cavernArray[i][j] == 0){
+        num = getRandomInt (1,300);
+        if (num < 2){
+          var newBatteryObject = {
+            "gid":16,
+            "height":16,
+            "name":"",
+            "properties":
+            {
+
+            },
+            "type":"battery",
+            "visible":true,
+            "width":16,
+            "x":j*32,
+            "y":(i+1)*32
+          };
+          objectLayer.objects.push(newBatteryObject);
+        } else if (cavernArray[i][j] == 0 && cavernArray[i+1][j] != 0){
+          num = getRandomInt(1,100);
+          if (num < 20){
+            var newSpikeObject = {
+              "gid":24,
+              "height":16,
+              "name":"",
+              "properties":
+              {
+              },
+              "type":"spike",
+              "visible":true,
+              "width":32,
+              "x":(j*32),
+              "y":((i+1)*32)
+            };
+            objectLayer.objects.push(newSpikeObject);
+          }
+        }
+      } 
     }
-  return cavernArray;
+  }
+  
+  return objectLayer;
+}
+
+
+// // create the main cavern data
+// function createCavern(cavernWidth, cavernHeight){
+//   // var cavernArray = new Array();
+//   var initialArray = createDetailedCavern(cavernWidth, cavernHeight);
+//   //   for (var i = 0; i < cavernHeight; i++){
+//   //     for (var j = 0; j < cavernWidth; j++){
+//   //       cavernArray[i*cavernWidth + j] = initialArray[i][j];
+//   //     }
+//   //   }
+//   // return cavernArray;
+//   return lineariseArray(initialArray);
+// }
+
+// turns an array of arrays into a single linear array;
+function lineariseArray(initialArray){
+  var count= 0;
+  var linearArray = new Array();
+  for (var i = 0; i < initialArray.length; i++){
+    for (var j = 0; j < initialArray[i].length; j++){
+      linearArray[count] = initialArray[i][j];
+      count++;
+    }
+  }
+  return linearArray;
 }
 
 // create a cavern with randomised tiles and grass on top
