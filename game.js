@@ -274,6 +274,10 @@ function updateShadowTexture () {
   // blend mode, the dark areas of the texture make all of the colors
   // underneath it darker, while the white area is unaffected.
 
+  // the centre point of the shadow texture (relative to shdaow texture). This point is always focused on the player
+  var textureCentreX = 2*game.width;
+  var textureCentreY = 2*game.height;
+
   // Draw shadow
   shadowTexture.context.fillStyle = 'rgb(0, 0, 0)';
   shadowTexture.context.fillRect(game.width, game.height, 2*game.width, 2*game.height);
@@ -281,14 +285,14 @@ function updateShadowTexture () {
   // Draw circle of light with a soft edge (radius dependent on battery life)
   var radius = lightRadius * Math.max(Math.min(player.battery, 1000)/1000, 0.4);
   var gradient = shadowTexture.context.createRadialGradient(
-      2*game.width,2*game.height, radius * 0.5,
-      2*game.width,2*game.height, radius);
+      textureCentreX,textureCentreY, radius * 0.5,
+      textureCentreX,textureCentreY, radius);
   gradient.addColorStop(0, 'rgba(255, 255, 255, 0.5)');
   gradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
 
   shadowTexture.context.beginPath();
   shadowTexture.context.fillStyle = gradient;
-  shadowTexture.context.arc(2*game.width, 2*game.height,
+  shadowTexture.context.arc(textureCentreX, textureCentreY,
       radius, 0, Math.PI*2);
   shadowTexture.context.fill();
 
@@ -311,20 +315,22 @@ function updateShadowTexture () {
   if (player.torchOn && !flicker) {
     shadowTexture.context.beginPath();
     shadowTexture.context.fillStyle = 'rgb(255, 255, 255)';
-    shadowTexture.context.arc(2*game.width, 2*game.height,
+    shadowTexture.context.arc(textureCentreX, textureCentreY,
     game.width + game.height, angleToMouse-Math.PI/8, angleToMouse + Math.PI/8);
-    shadowTexture.context.lineTo(2*game.width, 2*game.height);
+    shadowTexture.context.lineTo(textureCentreX, textureCentreY);
     shadowTexture.context.fill();
   }
 
   for (var i = 0; i < entities.length; i++) {
-    if (typeof entities.glow !== 'undefined') {
-      shadowTexture = entities[i].glow(shadowTexture);
+    if (typeof entities[i].glow != 'undefined') {
+      var horizDistance = entities[i].sprite.x - player.body.x;
+      var vertDistance = entities[i].sprite.y - player.body.y;
+      shadowTexture = entities[i].glow(shadowTexture, textureCentreX + horizDistance, textureCentreY + vertDistance);
     }
   }
 
-  lightSprite.x = player.body.x - 2*game.width + 6;
-  lightSprite.y = player.body.y - 2*game.height + 18;
+  lightSprite.x = player.body.x - textureCentreX+ 6;
+  lightSprite.y = player.body.y - textureCentreY + 18;
 
   // This just tells the engine it should update the texture cache
   shadowTexture.dirty = true;
