@@ -5,12 +5,15 @@ function createMap(){
   var cavernHeight = 50;
   
   var initialArray = createDetailedCavern(cavernWidth, cavernHeight);
+  // var cavernData = createDetailedCavern(cavernWidth, cavernHeight);
+  // var cavernData = createCavernSkeleton(cavernWidth, cavernHeight);
+
+
+  var entitiesLayer = createEntitiesLayer(cavernWidth, cavernHeight, initialArray);
+  var enemiesLayer = createEnemiesLayer(cavernWidth, cavernHeight, initialArray);
+
 
   var cavernData = createDecoratedCavern(cavernWidth, cavernHeight, initialArray);
-
-  var entitiesLayer = createEntitiesLayer(cavernWidth, cavernHeight,cavernData);
-  var enemiesLayer = createEnemiesLayer(cavernWidth, cavernHeight,cavernData);
-
   //add some decoration
   // cavernyData = addDecoration(50, 50, cavernData);
   
@@ -59,8 +62,6 @@ function createMap(){
     "version":1,
     "width":cavernWidth
 	};
-  // jsonObject.versionzz = 1;
-  // jsonObject.tilesets.push({"foo":"bar", "brong":32});
   console.log(jsonObject);
 	console.log("returning map");
 	return jsonObject;
@@ -102,11 +103,12 @@ function createEntitiesLayer(cavernWidth, cavernHeight, cavernArray){
             "visible":true,
             "width":16,
             "x":j*32,
-            "y":(i+2)*32
+            "y":(i+1)*32
           };
           entitiesLayer.objects.push(newBatteryObject);
-        } else if (cavernArray[i][j] == 0 && cavernArray[i+1][j] != 0){
-          // object is on floor!
+        } else 
+        if (cavernArray[i][j] == 0 && cavernArray[i+1][j] != 0){
+          //object is on floor!
           num = getRandomInt(1,100);
           if (num < 20){
             var newSpikeObject = {
@@ -120,7 +122,7 @@ function createEntitiesLayer(cavernWidth, cavernHeight, cavernArray){
               "visible":true,
               "width":32,
               "x":(j*32),
-              "y":((i+2)*32)
+              "y":((i+1)*32)
             };
             entitiesLayer.objects.push(newSpikeObject);
           } 
@@ -158,7 +160,7 @@ function createEnemiesLayer(cavernWidth, cavernHeight, cavernArray){
             "visible":true,
             "width":20,
             "x":(j*32),
-            "y":((i+1)*32)
+            "y":((i+1)*32 - 16)
           };
           enemiesLayer.objects.push(newSlimeObject);
         }
@@ -223,6 +225,7 @@ function createDecoratedCavern(cavernWidth, cavernHeight, initialArray){
       }
     }
   }
+  // return initialArray;
   return cavernArray;
 }
 
