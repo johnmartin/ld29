@@ -52,13 +52,13 @@ EntityBattery.prototype.hit = function () {
 EntityBattery.prototype.update = function () {
 }
 
-EntityBattery.prototype.glow = function (shadowTexture, x,y) {
+EntityBattery.prototype.glow = function (shadowTexture, x, y) {
   // Draw circle of light with a soft edge around the battery
-  var radius = 50;
+  var radius = 20;
   var gradient = shadowTexture.context.createRadialGradient(
       x,y, radius * 0.5,
       x,y, radius);
-  gradient.addColorStop(0, 'rgba(255, 255, 255, 0.5)');
+  gradient.addColorStop(0, 'rgba(43, 135, 71, 0.5)');
   gradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
 
   shadowTexture.context.beginPath();

@@ -322,7 +322,7 @@ function updateShadowTexture () {
   }
 
   for (var i = 0; i < entities.length; i++) {
-    if (typeof entities[i].glow != 'undefined') {
+    if (typeof entities[i].glow != 'undefined' && entities[i].alive) {
       var horizDistance = entities[i].sprite.x - player.body.x;
       var vertDistance = entities[i].sprite.y - player.body.y;
       shadowTexture = entities[i].glow(shadowTexture, textureCentreX + horizDistance, textureCentreY + vertDistance);
