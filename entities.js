@@ -14,12 +14,12 @@ var EntitySpike = function (i, object, game, player) {
 EntitySpike.prototype = Object.create(PIXI.Sprite.prototype);
 EntitySpike.prototype.constructor = Phaser.Sprite;
 
-EntitySpike.prototype.hit = function() {
+EntitySpike.prototype.hit = function () {
   this.player.dead();
   return false;
 }
 
-EntitySpike.prototype.update = function() {
+EntitySpike.prototype.update = function () {
 }
 
 // BATTERIES!
@@ -38,7 +38,7 @@ var EntityBattery = function (i, object, game, player) {
 EntityBattery.prototype = Object.create(PIXI.Sprite.prototype);
 EntityBattery.prototype.constructor = Phaser.Sprite;
 
-EntityBattery.prototype.hit = function() {
+EntityBattery.prototype.hit = function () {
   this.alive = false;
   this.sprite.kill();
   this.player.battery += 1000;
@@ -49,5 +49,9 @@ EntityBattery.prototype.hit = function() {
   return false;
 }
 
-EntityBattery.prototype.update = function() {
+EntityBattery.prototype.update = function () {
+}
+
+EntityBattery.prototype.glow = function (shadowTexture) {
+  return shadowTexture;
 }

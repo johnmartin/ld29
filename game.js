@@ -317,6 +317,12 @@ function updateShadowTexture () {
     shadowTexture.context.fill();
   }
 
+  for (var i = 0; i < entities.length; i++) {
+    if (typeof entities.glow !== 'undefined') {
+      shadowTexture = entities[i].glow(shadowTexture);
+    }
+  }
+
   lightSprite.x = player.body.x - 2*game.width + 6;
   lightSprite.y = player.body.y - 2*game.height + 18;
 
