@@ -1,6 +1,6 @@
-var game = new Phaser.Game(544, 544, Phaser.AUTO, 'game', { preload: preload, create: create, update: update, render: render }, false, false);
+var game = new Phaser.Game(544, 544, Phaser.AUTO, 'game', { preload: preload, create: create, update: update }, false, false);
 
-var amIProcedural = true;
+var amIProcedural = false;
 
 function preload () {
   if (!amIProcedural){
@@ -29,33 +29,31 @@ var layer;
 var player;
 var bg;
 var gui;
-var playerDirection = 'right';
+
+var gravity = 1200;
 var playerTopSpeed = 300;
 var playerAccel = 100;
 var playerDecel = 200;
 var playerJumpStrength = 460;
-var playerGibs;
-var gravity = 1200;
 var terminalVelocity = playerJumpStrength*1.5;
+var lightRadius = 200;
+var batteryMax = 2000;
+var healthMax = 100;
+
 var shadowTexture;
 var lightSprite;
-var lightRadius = 200;
 var mousePointer;
-var spikes;
-var batteries;
 var guiGFX;
+
 var upKey;
 var leftKey;
 var rightKey;
 var downKey;
 var jumpJustPressed;
-var batteryLife;
-var batteryMax = 2000;
-var health = 100;
-var healthMax = 100;
-var torchOn;
 
+var blankObject = { alive: false };
 var enemies = [];
+var entities = [];
 
 // var floors; // group of stationary objects that can be stood on but don't count as an obstacle froor things moving from below or the side.
 
@@ -66,51 +64,47 @@ function create () {
     var jsonMap = createMap();
     game.cache.addTilemap('level', null, jsonMap, Phaser.Tilemap.TILED_JSON);
   }
-    map = game.add.tilemap('level');
-    map.addTilesetImage('tiles');
+  map = game.add.tilemap('level');
+  map.addTilesetImage('tiles');
 
   bg = game.add.tileSprite(0, 0, 544, 544, 'bg');
   bg.fixedToCamera = true;
 
-  console.log(map);
   // tileset = game.add.tileset('tiles');
   map.setCollisionBetween(1, 8);
 
   layer = map.createLayer('Tiles');
-  // layer.debug = true;
   layer.resizeWorld();
-
-  playerGibs = game.add.emitter(0, 0, 4);
-  playerGibs.makeParticles('gibs', [0, 1, 2, 3, 4], 10, true, true);
-  playerGibs.gravity = gravity/2;
 
   // Add the mouse pointer
   mousePointer = game.add.sprite(game.width/2, game.height/2);
 
-  // Create Spikes!
-  spikes = game.add.group();
-  // spikes.debug = true;
-  spikes.enableBody = true;
-  spikes.immovable = true;
-  //  And now we convert all of the Tiled objects with an ID of 7 into actual, dangerous sprites within the group spikes
-  map.createFromObjects('Objects', GID.SPIKE, 'spike', 0, true, false, spikes);
+  // The player and its settings
+  player = new Player(game);
 
-  // Create Batteries!
-  batteries = game.add.group();
-  batteries.enableBody = true;
-  batteries.immovable = true;
-  //  And now we convert all of the Tiled objects with an ID of 7 into actual, dangerous sprites within the group spikes
-  map.createFromObjects('Objects', GID.BATTERY, 'battery', 0, true, false, batteries);
+  // Do the enemies
+  if (map.objects.Enemies !== undefined) {
+    for (var i = 0; i < map.objects.Enemies.length; i++) {
+      var object = map.objects.Enemies[i];
+      if (object.gid == GID.SLIME) {
+        enemies.push(new EnemySlime(i, object, game, player));
+      } else {
+        enemies.push(blankObject);
+      }
+    }
+  }
 
-  enemies = [];
-  // Do the objects
-  for (var i = 0; i < map.objects.Objects.length; i++) {
-    var object = map.objects.Objects[i];
-    if (object.gid == GID.SLIME) {
-      // Create Slime!
-      enemies.push(new EnemySlime(i, object, game, player));
-    } else {
-      enemies.push({ alive: false });
+  // Do the entities
+  if (map.objects.Entities !== undefined) {
+    for (var i = 0; i < map.objects.Entities.length; i++) {
+      var object = map.objects.Entities[i];
+      if (object.gid == GID.SPIKE) {
+        entities.push(new EntitySpike(i, object, game, player));
+      } else if (object.gid == GID.BATTERY) {
+        entities.push(new EntityBattery(i, object, game, player));
+      } else {
+        entities.push(blankObject);
+      }
     }
   }
 
@@ -140,33 +134,14 @@ function create () {
   // everything below this sprite.
   lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
 
-  // The player and its settings
-  player = game.add.sprite(700, 510, 'dude');
-  player.animations.add('idle-right', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 5);
-  player.animations.add('idle-left', [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6], 5);
-  player.animations.add('move-right', [2, 3], 10);
-  player.animations.add('move-left', [7, 8], 10);
-  player.animations.add('jump-right', [4], 10);
-  player.animations.add('jump-left', [9], 10);
-  game.physics.enable(player);
-  player.body.gravity.y = gravity;
-
-  player.body.setSize(12, 24, 6, 0);
-  // player.body.bounce.y = 0.2;
-  player.body.linearDamping = 1;
-  player.body.collideWorldBounds = true;
-
-  // torch stuff;
-  batteryLife = 2000;
-  torchOn = true;
+  player.init(700, 510);
+  game.camera.follow(player.sprite);
 
   // Create the GUI
   gui = game.add.tileSprite(0, 0, 544, 36, 'gui');
   gui.fixedToCamera = true;
   guiGFX = game.add.graphics(0, 0);
   guiGFX.fixedToCamera = true;
-
-  game.camera.follow(player);
 
   //  Our controls.
   upKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
@@ -176,22 +151,26 @@ function create () {
   restartKey = game.input.keyboard.addKey(Phaser.Keyboard.T);
   cursors = game.input.keyboard.createCursorKeys();
   jumpJustPressed = false;
+
 }
 
 function update () {
-  game.physics.arcade.collide(player, layer);
-  game.physics.arcade.collide(playerGibs, layer);
-
-  //  Checks to see if the player overlaps with any of the spikes, if he does call the hitSpike function
-  game.physics.arcade.overlap(player, spikes, hitSpike);
-  game.physics.arcade.overlap(player, batteries, hitBattery);
+  // Player
+  player.update(layer);
 
   // Enemies?
   for (var i = 0; i < enemies.length; i++) {
     if (enemies[i].alive) {
-      // game.physics.arcade.collide(player, enemies[i].sprite);
-      game.physics.arcade.overlap(player, enemies[i].sprite, hitEnemy);
+      game.physics.arcade.overlap(player.sprite, enemies[i].sprite, hitEnemy);
       enemies[i].update();
+    }
+  }
+
+  // Entities?
+  for (var i = 0; i < entities.length; i++) {
+    if (entities[i].alive) {
+      game.physics.arcade.overlap(player.sprite, entities[i].sprite, hitEntity);
+      entities[i].update();
     }
   }
 
@@ -240,30 +219,28 @@ function update () {
   if (cursors.up.isDown || upKey.isDown){
     if (player.body.touching.down || player.body.onFloor()){
       player.body.velocity.y = -playerJumpStrength;
-    } else if (!jumpJustPressed && batteryLife > 0){
+    } else if (!jumpJustPressed && player.battery > 0){
       // double jump!
       player.body.velocity.y = -playerJumpStrength;
-      batteryLife -= 200;
+      player.battery -= 200;
     }
   }
 
-
-  //update 'jumpJustPressed' flag;
-  jumpJustPressed = (cursors.up.isDown || upKey.isDown);
-
+  // Update 'jumpJustPressed' flag;
+  jumpJustPressed = ( cursors.up.isDown || upKey.isDown );
 
   if (!player.body.onFloor()) {
     animation = 'jump';
   }
 
-  player.animations.play(animation+'-'+playerDirection);
+  player.animation(animation);
 
   // update torch battery
-  if (batteryLife > 0) {
-    batteryLife--;
+  if (player.battery > 0) {
+    player.battery--;
   } else {
-    batteryLife = 0;
-    torchOn = false;
+    player.battery = 0;
+    player.torchOn = false;
   }
 
   // Update mouse pointer location
@@ -298,22 +275,8 @@ function destroyCurrentLevel(){
 
 }
 
-// when the player hits a spike...
-function hitSpike (player, spike) {
-  // You die!!!
-  player.kill();
-  playerGibby();
-  health = 0;
-}
-
-//when the player hits a battery...
-function hitBattery (player, battery) {
-  battery.kill();
-  batteryLife += 1000;
-  if (batteryLife > batteryMax) {
-    batteryLife = batteryMax;
-  }
-  torchOn = true;
+function hitEntity (player, entity) {
+  entities[entity.name].hit();
 }
 
 function hitEnemy (player, enemy) {
@@ -333,7 +296,7 @@ function updateShadowTexture () {
   shadowTexture.context.fillRect(game.width, game.height, 2*game.width, 2*game.height);
 
   // Draw circle of light with a soft edge (radius dependent on battery life)
-  var radius = lightRadius * Math.max(Math.min(batteryLife, 1000)/1000, 0.4);
+  var radius = lightRadius * Math.max(Math.min(player.battery, 1000)/1000, 0.4);
   var gradient = shadowTexture.context.createRadialGradient(
       2*game.width,2*game.height, radius * 0.5,
       2*game.width,2*game.height, radius);
@@ -348,21 +311,21 @@ function updateShadowTexture () {
 
   //draw torch light, if torch is on
   var flicker = false;
-  if (batteryLife <= 1000 && (batteryLife % 200 <  3)) {
+  if (player.battery <= 1000 && (player.battery % 200 <  3)) {
     flicker = true;
   }
-  if (batteryLife < 100 && (batteryLife % 10 < 5)) {
+  if (player.battery < 100 && (player.battery % 10 < 5)) {
     flicker = true;
   }
 
   var angleToMouse = Math.atan2(mousePointer.y - player.body.y, mousePointer.x - player.body.x);
   if ( angleToMouse > 0-(Math.PI/2) && angleToMouse < Math.PI/2 ) {
-    playerDirection = 'right';
+    player.direction = 'right';
   } else {
-    playerDirection = 'left';
+    player.direction = 'left';
   }
 
-  if (torchOn && !flicker) {
+  if (player.torchOn && !flicker) {
     shadowTexture.context.beginPath();
     shadowTexture.context.fillStyle = 'rgb(255, 255, 255)';
     shadowTexture.context.arc(2*game.width, 2*game.height,
@@ -377,7 +340,7 @@ function updateShadowTexture () {
   // This just tells the engine it should update the texture cache
   shadowTexture.dirty = true;
   lightSprite.dirty = true;
-  player.dirty = true;
+  player.sprite.dirty = true;
 
 }
 
@@ -385,20 +348,10 @@ function updateGUI () {
   guiGFX.clear();
   // Battery
   guiGFX.beginFill(0x5BB45D);
-  guiGFX.drawRect(442, 14, (batteryLife/batteryMax)*88, 8);
+  guiGFX.drawRect(442, 14, (player.battery/batteryMax)*88, 8);
   guiGFX.endFill();
   // Health
   guiGFX.beginFill(0xEA2C3F);
-  guiGFX.drawRect(14, 14, (health/healthMax)*88, 8);
+  guiGFX.drawRect(14, 14, (player.health/healthMax)*88, 8);
   guiGFX.endFill();
-}
-
-function playerGibby () {
-  playerGibs.x = player.x+6;
-  playerGibs.y = player.y+12;
-  playerGibs.start(true, 0, null, 60);
-}
-
-function render () {
-  // game.debug.bodyInfo(player, 32, 320);
 }

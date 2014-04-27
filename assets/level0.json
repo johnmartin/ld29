@@ -13,7 +13,7 @@
         }, 
         {
          "height":30,
-         "name":"Objects",
+         "name":"Entities",
          "objects":[
                 {
                  "gid":24,
@@ -112,7 +112,18 @@
                  "width":32,
                  "x":544,
                  "y":640
-                }, 
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "width":30,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "height":30,
+         "name":"Enemies",
+         "objects":[
                 {
                  "gid":21,
                  "height":8,
