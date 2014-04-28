@@ -1,5 +1,11 @@
 var game = new Phaser.Game(544, 544, Phaser.AUTO, 'game', { preload: preload, create: create, update: update }, false, false);
 
+var deathScreen = new deathScreen(game);
+
+
+game.state.add('DeathScreen',deathScreen);
+
+console.log(game.state);
 var amIProcedural = true;
 
 function preload () {
@@ -15,6 +21,7 @@ function preload () {
   game.load.spritesheet('gibs', 'assets/gibs.png', 4, 4);
   game.load.spritesheet('slime-gibs', 'assets/slime-gibs.png', 4, 4);
   game.load.spritesheet('slime', 'assets/slime.png', 20, 8);
+
 
 }
 
@@ -39,6 +46,8 @@ var terminalVelocity = playerJumpStrength*1.5;
 var lightRadius = 200;
 var batteryMax = 2000;
 var healthMax = 100;
+
+game.retirementMessage = true;
 
 var shadowTexture;
 var lightSprite;
@@ -250,7 +259,31 @@ function nextLevel(){
 // everything that happens at the start of the game and every time you restart
 // goes here
 function initialiseLevel () {
+  // player.dead();
+  // map.random(layer.getTileX(20), layer.getTileY(20), 6, 6);
+  // console.log(map);
 
+  create();
+
+  // if (amIProcedural){
+  //   var jsonMap = createMap();
+  //   game.cache.addTilemap('level', null, jsonMap, Phaser.Tilemap.TILED_JSON);
+  // }
+  // map = game.add.tilemap('level');
+  // map.addTilesetImage('tiles');
+
+  // // bg = game.add.tileSprite(0, 0, 544, 544, 'bg');
+  // // bg.fixedToCamera = true;
+
+  // // tileset = game.add.tileset('tiles');
+  // map.setCollisionBetween(1, 8);
+
+
+  // layer = map.createLayer('Tiles');
+  // layer.resizeWorld();
+
+  // The player and its settings
+  // player = new Player(game);
 }
 
 // get rid of map, enemies etc when we are leaving / restarting the level

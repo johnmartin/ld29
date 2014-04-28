@@ -62,7 +62,7 @@ function createMap(){
     "version":1,
     "width":cavernWidth
 	};
-  console.log(jsonObject);
+  // console.log(jsonObject);
 	console.log("returning map");
 	return jsonObject;
 }

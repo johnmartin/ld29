@@ -16,6 +16,7 @@ EntitySpike.prototype.constructor = Phaser.Sprite;
 
 EntitySpike.prototype.hit = function () {
   this.player.dead();
+  game.state.start('DeathScreen');
   return false;
 }
 

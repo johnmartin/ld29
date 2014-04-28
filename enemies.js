@@ -42,7 +42,6 @@ EnemySlime.prototype.update = function() {
   game.physics.arcade.collide(this.sprite, layer);
   game.physics.arcade.collide(this.gibs, layer);
   if(this.sprite.body.onWall()){
-    console.log("slime alert!");
     this.movingRight = !this.movingRight;
   }
   if (this.movingRight){
