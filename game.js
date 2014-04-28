@@ -325,7 +325,11 @@ function updateShadowTexture () {
     if (typeof entities[i].glow != 'undefined' && entities[i].alive) {
       var horizDistance = entities[i].sprite.x - player.body.x;
       var vertDistance = entities[i].sprite.y - player.body.y;
-      shadowTexture = entities[i].glow(shadowTexture, textureCentreX + horizDistance, textureCentreY + vertDistance);
+      // only change th shadow texture if the glowing object would actually appear within the shadow range
+      if (horizDistance <= textureCentreX && horizDistance >= -textureCentreX 
+      && vertDistance <= textureCentreY && vertDistance >= -textureCentreY){
+        shadowTexture = entities[i].glow(shadowTexture, textureCentreX + horizDistance, textureCentreY + vertDistance);
+      }
     }
   }
 
