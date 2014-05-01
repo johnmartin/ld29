@@ -57,7 +57,8 @@ level.prototype.preload = function(){
   level.load.spritesheet('slime', 'assets/slime.png', 20, 8);
 }
 
-level.prototype.create = function(){game.physics.startSystem(Phaser.Physics.ARCADE);
+level.prototype.create = function(){
+	this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
   if (amIProcedural){
     var jsonMap = createMap();
@@ -79,7 +80,7 @@ level.prototype.create = function(){game.physics.startSystem(Phaser.Physics.ARCA
   mousePointer = game.add.sprite(game.width/2, game.height/2);
 
   // The player and its settings
-  player = new Player(this);
+  player = new Player(game);
 
   // Do the enemies
   if (map.objects.Enemies !== undefined) {
@@ -241,8 +242,6 @@ level.prototype.update = function(){
 
 
 level.prototype.hitEntity = function(player, entity) {
-
-  console.log(game);
   entities[entity.name].hit();
 }
 
@@ -338,3 +337,13 @@ level.prototype.updateGUI = function () {
   guiGFX.drawRect(14, 14, (player.health/healthMax)*88, 8);
   guiGFX.endFill();
 }
+
+
+
+level.prototype.shutdown = function(){
+	if (player != null){
+		player.sprite.kill();
+	}
+	entities = [];
+	enemies = [];
+}	

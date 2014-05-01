@@ -15,7 +15,7 @@ deathScreen.prototype.create = function(){
 	this.titleimage = this.add.sprite(this.game.world.centerX,0,'title');
 	deadPlayer = deathScreen.add.sprite(250,250, 'dude');
  	deadPlayer.animations.add('move-right', [2, 3], 10);
-	console.log(deadPlayer);
+	// console.log(deadPlayer);
  	// deadPlayer.animations.play('move-right');
 
  	var style = {font: "65px Arial", fill: "#cccccc", align: "center" };

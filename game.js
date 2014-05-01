@@ -70,8 +70,7 @@ function preload () {
 // var floors; // group of stationary objects that can be stood on but don't count as an obstacle froor things moving from below or the side.
 
 function create () {
-  // game.state.start('Level');
-  game.state.start('DeathScreen');
+  game.state.start('Level');
 
 
   // game.physics.startSystem(Phaser.Physics.ARCADE);

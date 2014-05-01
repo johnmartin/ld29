@@ -17,6 +17,9 @@ var EnemySlime = function (i, object, game, player) {
   this.sprite.body.gravity.y = gravity;
   this.sprite.body.bounce.x = 0.5;
 
+  // console.log("slime sprite:")
+  // console.log(this.sprite.events.onKilled);
+
   this.gibs = game.add.emitter(0, 0, 4);
   this.gibs.makeParticles('slime-gibs', [0, 1, 2, 3, 4], 100, true, true);
   this.gibs.gravity = gravity/4;
