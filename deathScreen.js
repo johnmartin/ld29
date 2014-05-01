@@ -26,6 +26,11 @@ deathScreen.prototype.create = function(){
     var retirementText = this.add.text(game.width/2 - 250, 150, "\"...I was one day from retirement...\"", style);
   }
 
+  if (game.levelCount > 1){
+    style = {font: "32px Arial", fill: "#cccccc", align: "center" };
+    var scoreText = this.add.text(game.width/2 - 150, 350, "You got to level " + game.levelCount + ".", style);
+  }
+  
   style = {font: "32px Arial", fill: "#cccccc", align: "center" };
   var lowerText = this.add.text(game.width/2 - 125, 400, "Press T to restart", style);
 
