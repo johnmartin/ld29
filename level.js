@@ -309,9 +309,9 @@ level.prototype.updateShadowTexture = function () {
 
   var angleToMouse = Math.atan2(mousePointer.y - player.body.y, mousePointer.x - player.body.x);
   if ( angleToMouse > 0-(Math.PI/2) && angleToMouse < Math.PI/2 ) {
-    player.direction = 'right';
+    player.direction('right');
   } else {
-    player.direction = 'left';
+    player.direction('left');
   }
 
   if (player.torchOn && !flicker) {
