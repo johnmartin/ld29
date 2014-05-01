@@ -14,12 +14,12 @@ var EnemySlime = function (i, object, game, player) {
   this.sprite.body.immovable = false;
   this.sprite.body.collideWorldBounds = true;
   this.sprite.body.linearDamping = 1;
-  this.sprite.body.gravity.y = gravity;
+  this.sprite.body.gravity.y = CONSTANT.GRAVITY;
   this.sprite.body.bounce.x = 0.5;
 
   this.gibs = game.add.emitter(0, 0, 4);
   this.gibs.makeParticles('slime-gibs', [0, 1, 2, 3, 4], 100, true, true);
-  this.gibs.gravity = gravity/4;
+  this.gibs.gravity = CONSTANT.GRAVITY/4;
 }
 
 EnemySlime.prototype = Object.create(PIXI.Sprite.prototype);
@@ -38,7 +38,7 @@ EnemySlime.prototype.hit = function() {
   return false;
 }
 
-EnemySlime.prototype.update = function() {
+EnemySlime.prototype.update = function(layer) {
   game.physics.arcade.collide(this.sprite, layer);
   game.physics.arcade.collide(this.gibs, layer);
   if(this.sprite.body.onWall()){

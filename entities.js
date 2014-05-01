@@ -1,72 +1,82 @@
-// SPIKES!
-var EntitySpike = function (i, object, game, player) {
-  this.game = game;
-  this.player = player;
-  this.alive = true;
+!function (window, CONSTANT) {
 
-  this.sprite = game.add.sprite(object.x, object.y-16, 'spike');
-  this.sprite.name = i.toString();
-  game.physics.enable(this.sprite);
-  this.sprite.body.enableBody = true;
-  this.sprite.body.immovable = true;
-}
+  // SPIKES!
+  function Spikes (i, object, game, player) {
 
-EntitySpike.prototype = Object.create(PIXI.Sprite.prototype);
-EntitySpike.prototype.constructor = Phaser.Sprite;
+    var sprite = game.add.sprite(object.x, object.y - 16, 'spike');
+    sprite.name = i.toString();
+    game.physics.enable(sprite);
+    sprite.body.enableBody = true;
+    sprite.body.immovable = true;
 
-EntitySpike.prototype.hit = function () {
-  this.player.dead();
-  game.state.start('DeathScreen');
-  return false;
-}
+    function Hit () {
+      player.dead();
+      return false;
+    }
 
-EntitySpike.prototype.update = function () {
-}
+    // Public instance functions
+    Spikes.prototype.hit = Hit;
 
-// BATTERIES!
-var EntityBattery = function (i, object, game, player) {
-  this.game = game;
-  this.player = player;
-  this.alive = true;
+    // Public instance variables
+    this.has_glow = false;
+    this.alive = true;
+    this.sprite = sprite;
 
-  this.sprite = game.add.sprite(object.x, object.y-16, 'battery');
-  this.sprite.name = i.toString();
-  game.physics.enable(this.sprite);
-  this.sprite.body.enableBody = true;
-  this.sprite.body.immovable = true;
-}
-
-EntityBattery.prototype = Object.create(PIXI.Sprite.prototype);
-EntityBattery.prototype.constructor = Phaser.Sprite;
-
-EntityBattery.prototype.hit = function () {
-  this.alive = false;
-  this.sprite.kill();
-  this.player.battery += 1000;
-  if (this.player.battery > batteryMax) {
-    this.player.battery = batteryMax;
   }
-  this.player.torchOn = true;
-  return false;
-}
 
-EntityBattery.prototype.update = function () {
-}
+  // Setup the PIXI/Phaser inheritance...
+  Spikes.prototype = Object.create(PIXI.Sprite.prototype);
+  Spikes.prototype.constructor = Phaser.Sprite;
 
-EntityBattery.prototype.glow = function (shadowTexture, x, y) {
-  // Draw circle of light with a soft edge around the battery
-  var radius = 20;
-  var gradient = shadowTexture.context.createRadialGradient(
-      x,y, radius * 0.5,
-      x,y, radius);
-  gradient.addColorStop(0, 'rgba(43, 135, 71, 0.5)');
-  gradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
+  // BATTERIES!
+  function Batteries (i, object, game, player) {
 
-  shadowTexture.context.beginPath();
-  shadowTexture.context.fillStyle = gradient;
-  shadowTexture.context.arc(x, y,
-      radius, 0, Math.PI*2);
-  shadowTexture.context.fill();
+    var alive = true;
+    var sprite = game.add.sprite(object.x, object.y-16, 'battery');
+    sprite.name = i.toString();
+    game.physics.enable(sprite);
+    sprite.body.enableBody = true;
+    sprite.body.immovable = true;
 
-  return shadowTexture;
-}
+    function Hit () {
+      alive = false;
+      sprite.kill();
+      player.add_battery(1000);
+      return false;
+    }
+
+    function Glow (shadowTexture, x, y) {
+      var radius = 20;
+      var gradient = shadowTexture.context.createRadialGradient(
+          x,y, radius * 0.5,
+          x,y, radius);
+      gradient.addColorStop(0, 'rgba(43, 135, 71, 0.5)');
+      gradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
+      shadowTexture.context.beginPath();
+      shadowTexture.context.fillStyle = gradient;
+      shadowTexture.context.arc(x, y,
+          radius, 0, Math.PI*2);
+      shadowTexture.context.fill();
+      return shadowTexture;
+    }
+
+    // Public instance functions
+    Batteries.prototype.hit = Hit;
+    Batteries.prototype.glow = Glow;
+
+    // Public instance variables
+    this.has_glow = true;
+    this.alive = alive;
+    this.sprite = sprite;
+
+  }
+
+  // Setup the PIXI/Phaser inheritance...
+  Batteries.prototype = Object.create(PIXI.Sprite.prototype);
+  Batteries.prototype.constructor = Phaser.Sprite;
+
+  // Globals
+  window.EntitySpike = Spikes;
+  window.EntityBattery = Batteries;
+
+}(window, window.CONSTANT);

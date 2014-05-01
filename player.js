@@ -5,9 +5,9 @@
 
     var inited = false;
     var alive = true;
-    var health = 10;
     var gibs;
-    var battery = 2000;
+    var health = CONSTANT.MAX_HEALTH;
+    var battery = CONSTANT.MAX_BATTERY;
     var torchOn = true;
     var facing = 'right';
     var sprite;
@@ -26,7 +26,7 @@
 
       // Enable the physics on the sprite
       game.physics.enable(sprite);
-      sprite.body.gravity.y = gravity;
+      sprite.body.gravity.y = CONSTANT.GRAVITY;
       sprite.body.setSize(12, 24, 6, 0);
       sprite.body.linearDamping = 1;
       sprite.body.collideWorldBounds = true;
@@ -34,7 +34,7 @@
       // Setup the kill jibs
       gibs = game.add.emitter(0, 0, 4);
       gibs.makeParticles('gibs', [0, 1, 2, 3, 4], 10, true, true);
-      gibs.gravity = gravity/4;
+      gibs.gravity = CONSTANT.GRAVITY/4;
 
       // Public sprite re-definition
       this.sprite = sprite;
@@ -78,6 +78,14 @@
       gibs.start(true, 0, null, 60);
     }
 
+    function AddBattery (to_add) {
+      battery += to_add;
+      if (battery > CONSTANT.MAX_BATTERY) {
+        battery = CONSTANT.MAX_BATTERY;
+      }
+      torchOn = true;
+    }
+
     // Public instance functions
     Player.prototype.init = Init;
     Player.prototype.animation = Animation;
@@ -85,6 +93,7 @@
     Player.prototype.dead = Dead;
     Player.prototype.hit = Hit;
     Player.prototype.direction = Direction;
+    Player.prototype.add_battery = AddBattery;
 
     // Public instance variables
     this.sprite = sprite;
