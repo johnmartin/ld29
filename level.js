@@ -1,49 +1,49 @@
-level = function(game){
-   this.game = game;
+level = function (game) {
+  this.game = game;
 
-   amIProcedural = true;
+  amIProcedural = true;
 
-	GID = {
-	  SPIKE: 24,
-	  BATTERY: 16,
-	  SLIME: 21
-	};
+  GID = {
+    SPIKE: 24,
+    BATTERY: 16,
+    SLIME: 21
+  };
 
-	var map;
-	var layer;
-	var player;
-	var bg;
-	var gui;
+  var map;
+  var layer;
+  var player;
+  var bg;
+  var gui;
 
-	gravity = 1200;
-	playerTopSpeed = 300;
-	playerAccel = 100;
-	playerDecel = 200;
-	playerJumpStrength = 460;
-	terminalVelocity = playerJumpStrength*1.5;
-	lightRadius = 200;
-	batteryMax = 2000;
-	healthMax = 100;
+  gravity = 1200;
+  playerTopSpeed = 300;
+  playerAccel = 100;
+  playerDecel = 200;
+  playerJumpStrength = 460;
+  terminalVelocity = playerJumpStrength*1.5;
+  lightRadius = 200;
+  batteryMax = 2000;
+  healthMax = 100;
 
   batteryLife = 2000;
 
-	var shadowTexture;
-	var lightSprite;
-	var mousePointer;
-	var guiGFX;
+  var shadowTexture;
+  var lightSprite;
+  var mousePointer;
+  var guiGFX;
 
-	var upKey;
-	var leftKey;
-	var rightKey;
-	var downKey;
-	var jumpJustPressed;
+  var upKey;
+  var leftKey;
+  var rightKey;
+  var downKey;
+  var jumpJustPressed;
 
-	var blankObject = { alive: false };
-	 enemies = [];
-	 entities = [];
+  var blankObject = { alive: false };
+  enemies = [];
+  entities = [];
 }
 
-level.prototype.preload = function(){
+level.prototype.preload = function () {
   if (!amIProcedural){
     level.load.tilemap('level', 'assets/level0.json', null, Phaser.Tilemap.TILED_JSON);
   }
@@ -58,8 +58,8 @@ level.prototype.preload = function(){
   level.load.spritesheet('slime', 'assets/slime.png', 20, 8);
 }
 
-level.prototype.create = function(){
-	this.game.physics.startSystem(Phaser.Physics.ARCADE);
+level.prototype.create = function () {
+  this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
   if (amIProcedural){
     var jsonMap = createMap();
@@ -145,7 +145,7 @@ level.prototype.create = function(){
 }
 
 
-level.prototype.update = function(){
+level.prototype.update = function (){
   // Player
   player.update(layer);
 
@@ -252,7 +252,7 @@ level.prototype.update = function(){
 }
 
 
-level.prototype.nextLevel = function(){
+level.prototype.nextLevel = function () {
   // pass the batteryLife data on
   console.log(player.battery);
   game.batteryLife = player.battery;
@@ -260,15 +260,15 @@ level.prototype.nextLevel = function(){
   game.state.start('TransitionScreen');
 }
 
-level.prototype.hitEntity = function(player, entity) {
+level.prototype.hitEntity = function (player, entity) {
   entities[entity.name].hit();
 }
 
-level.prototype.hitEnemy = function(player, enemy) {
+level.prototype.hitEnemy = function (player, enemy) {
   enemies[enemy.name].hit();
 }
 
-level.prototype.updateShadowTexture = function() {
+level.prototype.updateShadowTexture = function () {
   // This function updates the shadow texture (shadowTexture).
   // First, it fills the entire texture with a dark shadow color.
   // Then it draws a white circle centered on the pointer position.
@@ -357,12 +357,10 @@ level.prototype.updateGUI = function () {
   guiGFX.endFill();
 }
 
-
-
-level.prototype.shutdown = function(){
-	if (player != null){
-		player.sprite.kill();
-	}
-	entities = [];
-	enemies = [];
-}	
+level.prototype.shutdown = function (){
+  if (player != null){
+    player.sprite.kill();
+  }
+  entities = [];
+  enemies = [];
+}

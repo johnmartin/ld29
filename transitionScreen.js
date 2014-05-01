@@ -1,20 +1,16 @@
-transitionScreen = function(game){
+transitionScreen = function (game) {
    this.game = game;
 }
 
-
-transitionScreen.prototype.preload = function(){
-
-	// All preload data for current state goes here... for example:
-
- 	transitionScreen.load.spritesheet('dude', 'assets/dude.png', 24, 24);
+transitionScreen.prototype.preload = function () {
+  // All preload data for current state goes here... for example:
+  transitionScreen.load.spritesheet('dude', 'assets/dude.png', 24, 24);
 }
 
-transitionScreen.prototype.create = function(){
+transitionScreen.prototype.create = function () {
 
   bg = game.add.tileSprite(0, 0, 544, 544, 'bg');
   bg.fixedToCamera = true;
-
 
   // Light and shadow stuff
   // Create the shadow texture
@@ -25,13 +21,13 @@ transitionScreen.prototype.create = function(){
   // everything below this sprite.
   lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
 
-	this.titleimage = this.add.sprite(this.game.world.centerX,0,'title');
-	player = transitionScreen.add.sprite(250,250, 'dude');
- 	player.animations.add('move-right', [2, 3], 10);
-	// console.log(deadPlayer);
- 	// deadPlayer.animations.play('move-right');
+  this.titleimage = this.add.sprite(this.game.world.centerX,0,'title');
+  player = transitionScreen.add.sprite(250,250, 'dude');
+   player.animations.add('move-right', [2, 3], 10);
+  // console.log(deadPlayer);
+   // deadPlayer.animations.play('move-right');
 
- 	var style = {font: "65px Arial", fill: "#cccccc", align: "center" };
+   var style = {font: "65px Arial", fill: "#cccccc", align: "center" };
   var text = this.add.text(game.width/2, 100, "Level " + game.levelCount + " Complete!", style);
 
   style = {font: "32px Arial", fill: "#cccccc", align: "center" };
@@ -39,27 +35,25 @@ transitionScreen.prototype.create = function(){
 
   text.anchor.set(0.5);
 
-
-
-	continueKey = game.input.keyboard.addKey(Phaser.Keyboard.T);
+  continueKey = game.input.keyboard.addKey(Phaser.Keyboard.T);
 
 }
 
 
-transitionScreen.prototype.update = function(){
+transitionScreen.prototype.update = function () {
 
-	player.animations.play('move-right');
-	if (continueKey.isDown) {
+  player.animations.play('move-right');
+  if (continueKey.isDown) {
     game.levelCount++;
     game.state.start('Level');
- 	}
+  }
 
   transitionScreen.drawShadowTexture();
 
 }
 
 
-transitionScreen.prototype.drawShadowTexture = function() {
+transitionScreen.prototype.drawShadowTexture = function () {
   // This function updates the shadow texture (shadowTexture).
   // First, it fills the entire texture with a dark shadow color.
   // Then it draws a white circle centered on the pointer position.
