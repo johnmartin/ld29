@@ -117,7 +117,7 @@ level.prototype.create = function(){
   // everything below this sprite.
   lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
 
-  player.init(700, 510);
+  player.init(490, 100);
   game.camera.follow(player.sprite);
 
   // Create the GUI

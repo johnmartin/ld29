@@ -389,23 +389,23 @@ function createCavernSkeleton(cavernWidth, cavernHeight){    // intialise array
 
 
   // now draw a wigglly route corresponding that will have to stay clear
-  for (var j = 5; j < cavernWidth - 25; j++){
+  for (var j = 15; j < cavernWidth - 15; j++){
     cavernArray[15][j] = -1;
   }
-  for (var j = 25; j < cavernWidth-5; j++){
-    cavernArray[35][j] = -1;
+  for (var j = 15; j < cavernWidth-15; j++){
+    cavernArray[25][j] = -1;
   }
-  for (var j = 5; j < cavernWidth - 25; j++){
-    cavernArray[14][j] = -1;
+  for (var j = 15; j < cavernWidth - 1; j++){
+    cavernArray[35][j] = -1;
   }
   for (var i = 0; i < 15; i++){
     cavernArray[i][15] = -1;
   }
   for (var i = 15; i < 25; i++){
-    cavernArray[i][cavernWidth-25] = -1;
+    cavernArray[i][cavernWidth-15] = -1;
   }
   for (var i = 25; i < 35; i++){
-    cavernArray[i][25] = -1;
+    cavernArray[i][15] = -1;
   }
   //That's it!
   return cavernArray;
