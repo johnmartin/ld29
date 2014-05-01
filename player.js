@@ -29,9 +29,9 @@ Player.prototype.init = function(x, y, battery) {
   this.sprite.body.linearDamping = 1;
   this.sprite.body.collideWorldBounds = true;
 
-  this.gibs = game.add.emitter(0, 0, 4);
-  this.gibs.makeParticles('gibs', [0, 1, 2, 3, 4], 10, true, true);
-  this.gibs.gravity = gravity/4;
+  // this.gibs = game.add.emitter(0, 0, 4);
+  // this.gibs.makeParticles('gibs', [0, 1, 2, 3, 4], 10, true, true);
+  // this.gibs.gravity = gravity/4;
 
   this.body = this.sprite.body;
 
@@ -47,9 +47,9 @@ Player.prototype.hit = function() {
   if (this.health <= 0) {
     this.alive = false;
     this.sprite.kill();
-    this.gibs.x = this.sprite.x;
-    this.gibs.y = this.sprite.y;
-    this.gibs.start(true, 0, null, 60);
+    // this.gibs.x = this.sprite.x;
+    // this.gibs.y = this.sprite.y;
+    // this.gibs.start(true, 0, null, 60);
     return true;
   }
   return false;
@@ -57,7 +57,7 @@ Player.prototype.hit = function() {
 
 Player.prototype.update = function(layer) {
   game.physics.arcade.collide(this.sprite, layer);
-  game.physics.arcade.collide(this.gibs, layer);
+  // game.physics.arcade.collide(this.gibs, layer);
   if (this.sprite.body.velocity.y > terminalVelocity) {
     this.sprite.body.velocity.y = terminalVelocity;
   }
@@ -66,7 +66,7 @@ Player.prototype.update = function(layer) {
 Player.prototype.dead = function() {
   this.sprite.kill();
   this.health = 0;
-  this.gibs.x = this.sprite.x+6;
-  this.gibs.y = this.sprite.y+12;
-  this.gibs.start(true, 0, null, 60);
+  // this.gibs.x = this.sprite.x+6;
+  // this.gibs.y = this.sprite.y+12;
+  // this.gibs.start(true, 0, null, 60);
 }
