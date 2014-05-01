@@ -107,7 +107,8 @@ function createEntitiesLayer(cavernWidth, cavernHeight, cavernArray){
           };
           entitiesLayer.objects.push(newBatteryObject);
         } else 
-        if (cavernArray[i][j] == 0 && cavernArray[i+1][j] != 0){
+        // 20% chance of creating a spike on a floor with 2 spaces above it
+        if (i > 1 && cavernArray[i][j] == 0 && cavernArray[i+1][j] != 0 && cavernArray[i-1][j] == 0 ){
           //object is on floor!
           num = getRandomInt(1,100);
           if (num < 20){
@@ -395,7 +396,7 @@ function createCavernSkeleton(cavernWidth, cavernHeight){    // intialise array
   for (var j = 15; j < cavernWidth-15; j++){
     cavernArray[25][j] = -1;
   }
-  for (var j = 15; j < cavernWidth - 1; j++){
+  for (var j = 15; j < cavernWidth; j++){
     cavernArray[35][j] = -1;
   }
   for (var i = 0; i < 15; i++){
@@ -412,21 +413,6 @@ function createCavernSkeleton(cavernWidth, cavernHeight){    // intialise array
 }
 
 
-
-// // creates a spanning tree of a grid
-// function randomGridTree(gridWidth, gridHeight){
-//   var gridTree;
-//   var connectedArray = new Array();
-//   var[0] = 
-//   for (var h = 1, var h < gridWidth * gridgHeight; h++){
-
-//   }
-// }
-
-// // checks whether two points are connected in a subgraph of a grid
-// function checkConnected(pointA, pointB, gridGraph){
-
-// }
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;

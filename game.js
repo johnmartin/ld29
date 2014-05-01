@@ -5,8 +5,12 @@ var deathScreen = new deathScreen(game);
 game.state.add('DeathScreen',deathScreen);
 game.retirementMessage = true;
 
+var transitionScreen = new transitionScreen(game);
+game.state.add('TransitionScreen', transitionScreen);
+
 var level = new level(game);
 game.state.add('Level', level);
+
 
 // console.log(game.state);
 

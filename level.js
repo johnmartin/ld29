@@ -237,9 +237,17 @@ level.prototype.update = function(){
   // Update the GUI items
   level.updateGUI();
 
+
+  if(player.body.x > 1500){
+    level.nextLevel();
+  }
+
 }
 
 
+level.prototype.nextLevel = function(){
+  game.state.start('TransitionScreen');
+}
 
 level.prototype.hitEntity = function(player, entity) {
   entities[entity.name].hit();
