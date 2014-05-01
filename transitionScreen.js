@@ -32,7 +32,7 @@ transitionScreen.prototype.create = function(){
  	// deadPlayer.animations.play('move-right');
 
  	var style = {font: "65px Arial", fill: "#cccccc", align: "center" };
-  var text = this.add.text(game.width/2, 100, "Level Complete!", style);
+  var text = this.add.text(game.width/2, 100, "Level " + game.levelCount + " Complete!", style);
 
   style = {font: "32px Arial", fill: "#cccccc", align: "center" };
   var lowerText = this.add.text(game.width/2 - 125, 400, "Press T to continue", style);
@@ -50,7 +50,8 @@ transitionScreen.prototype.update = function(){
 
 	player.animations.play('move-right');
 	if (continueKey.isDown) {
-  game.state.start('Level');
+    game.levelCount++;
+    game.state.start('Level');
  	}
 
   transitionScreen.drawShadowTexture();

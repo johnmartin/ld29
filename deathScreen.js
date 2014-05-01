@@ -42,7 +42,9 @@ deathScreen.prototype.update = function(){
 		deadPlayer.animations.play('move-right');
 	// The game loop for this particular state goes here... for example :
 	if (restartKey.isDown) {
-  game.state.start('Level');
+    game.levelCount = 1;
+    game.batteryLife = 2000;
+    game.state.start('Level');
  	}
 
 }

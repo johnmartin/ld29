@@ -12,7 +12,7 @@ var Player = function (game) {
 Player.prototype = Object.create(PIXI.Sprite.prototype);
 Player.prototype.constructor = Phaser.Sprite;
 
-Player.prototype.init = function(x, y) {
+Player.prototype.init = function(x, y, battery) {
   this.sprite = game.add.sprite(x, y, 'dude');
   this.sprite.name = 'player';
   this.sprite.animations.add('idle-right', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 5);
@@ -34,6 +34,8 @@ Player.prototype.init = function(x, y) {
   this.gibs.gravity = gravity/4;
 
   this.body = this.sprite.body;
+
+  this.battery = battery;
 }
 
 Player.prototype.animation = function(what) {

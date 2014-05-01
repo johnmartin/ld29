@@ -11,7 +11,8 @@ game.state.add('TransitionScreen', transitionScreen);
 var level = new level(game);
 game.state.add('Level', level);
 
-
+game.batteryLife = 2000;
+game.levelcount = 1;
 // console.log(game.state);
 
 // var amIProcedural = true;

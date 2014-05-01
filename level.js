@@ -25,6 +25,7 @@ level = function(game){
 	batteryMax = 2000;
 	healthMax = 100;
 
+  batteryLife = 2000;
 
 	var shadowTexture;
 	var lightSprite;
@@ -117,7 +118,13 @@ level.prototype.create = function(){
   // everything below this sprite.
   lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
 
-  player.init(490, 100);
+
+  console.log(batteryLife);
+  console.log("game battery life");
+  console.log(game.batteryLife);
+  this.batteryLife = game.batteryLife;
+  console.log(this.batteryLife);
+  player.init(490, 100, this.batteryLife);
   game.camera.follow(player.sprite);
 
   // Create the GUI
@@ -246,6 +253,10 @@ level.prototype.update = function(){
 
 
 level.prototype.nextLevel = function(){
+  // pass the batteryLife data on
+  console.log(player.battery);
+  game.batteryLife = player.battery;
+  console.log(game.batteryLife);
   game.state.start('TransitionScreen');
 }
 
