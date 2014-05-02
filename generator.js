@@ -1,12 +1,11 @@
 function createMap(){
+  // WELCOME TO ARRAY CITY
+  // Here in Array City, we make one simple promise: No array will be changed outside the method in which it was created.
+  // This allows our citizens (the arrays) to live with each other in harmony, and also makes bug fixing a little easier hopefully.
   console.log("creating map");
 
   var cavernWidth = 50;
   var cavernHeight = 50;
-
-
-  createCavernSkeleton
-  createRawCavernNess
 
 
   // create the 'no obstacle' route. This is, hypothetically, where our hero will travel
@@ -17,19 +16,16 @@ function createMap(){
   var rawCavernNess = createRawCavernNess(cavernWidth, cavernHeight, cavernSkeleton);
 
   // 4-entry (?) array given x and y co-ordinates of starting position and ending position
-  var terminalPoints = createTerminalPoints(cavernWidth, cavernHeight, cavernSkeleton, forbiddenSpaces);
+  var terminalPoints = createTerminalPoints(cavernWidth, cavernHeight, rawCavernNess);
   forbiddenSpaces = updateForbiddenWithTerminals(cavernWidth, cavernHeight, forbiddenSpaces, terminalPoints);
 
   // distribute some batteries through the level
   var batteryLocations = createBatteryLocations(cavernWidth, cavernHeight, rawCavernNess);
   forbiddenSpaces = addForbiddenSpaces(cavernWidth, cavernHeight, forbiddenSpaces, batteryLocations);
 
-
   // distribute spikes randomly through the level
   var spikeLocations = createSpikeLocations(cavernWidth, cavernHeight, rawCavernNess, forbiddenSpaces);
   forbiddenSpaces = addForbiddenSpaces(cavernWidth, cavernHeight, forbiddenSpaces, spikeLocations);
-
-  // console.log(spikeLocations);
 
   // distribute slime enemies randomly through the level
   var slimeLocations = createSlimeLocations(cavernWidth, cavernHeight, rawCavernNess, forbiddenSpaces);
@@ -45,14 +41,7 @@ function createMap(){
   var linearCavernData = lineariseArray(detailedCavernArray);
   var enemiesLayer = createEnemiesLayer(cavernWidth, cavernHeight,slimeLocations);
   var entitiesLayer = createEntitiesLayer(cavernWidth, cavernHeight, batteryLocations, spikeLocations);
-
-  // // populate the cavern with entites and enemies 
-  // var entitiesLayer = createEntitiesLayer(cavernWidth, cavernHeight, rawCavernNess);
-  // var enemiesLayer = createEnemiesLayer(cavernWidth, cavernHeight, rawCavernNess);
-  // // Turn those boring uniform blocks into varied blocks with grass on top
-  // var detailedCavern = createDetailedCavern(cavernWidth, cavernHeight, rawCavernNess);
-  // // add other bits of decoration to the cavern
-  // var cavernData = createDecoratedCavern(cavernWidth, cavernHeight, detailedCavern);
+  var terminalPointsLayer = createTerminalPointsLayer(cavernWidth, cavernHeight, terminalPoints);
 
   // // take the cavern data and turn it into a linear array for the JSON file
   // var linearCavernData = lineariseArray(cavernData);
@@ -65,6 +54,8 @@ function createMap(){
            "height":cavernHeight,
            "name":"Tiles",
            "opacity":1,
+           "startX":1000,
+           "startY":100,
            "type":"tilelayer",
            "visible":true,
            "width":cavernWidth,
@@ -72,7 +63,8 @@ function createMap(){
            "y":0
            },
         entitiesLayer,
-        enemiesLayer
+        enemiesLayer,
+        terminalPointsLayer
         ],
      "orientation":"orthogonal",
      "properties":
@@ -100,77 +92,54 @@ function createMap(){
     "version":1,
     "width":cavernWidth
   };
-  // console.log(jsonObject);
-  console.log("returning map");
   return jsonObject;
 }
 
 
 
-// // creates a json object containing all the fun stuff like spikes and bateries, 
-// // based on cavern data
-// function createEntitiesLayer(cavernWidth, cavernHeight, cavernArray){
-//   // the JSON object where all the exciting stuff lives!
-//    var entitiesLayer = 
-//   {
-//     "height":cavernHeight,
-//     "name":"Entities",
-//     "objects":[],
-//     "opacity":1,
-//     "type":"objectgroup",
-//     "visible":true,
-//     "width":cavernWidth,
-//     "x":0,
-//     "y":0
-//    };
-//   var num;
-//   for (var i = 0; i < cavernHeight-1; i++){
-//     for(var j = 0; j < cavernWidth; j++){
-//       if (cavernArray[i][j] == 0){
-//         num = getRandomInt (1,300);
-//         if (num < 2){
-//           var newBatteryObject = {
-//             "gid":16,
-//             "height":16,
-//             "name":"",
-//             "properties":
-//             {
 
-//             },
-//             "type":"battery",
-//             "visible":true,
-//             "width":16,
-//             "x":j*32,
-//             "y":(i+1)*32
-//           };
-//           entitiesLayer.objects.push(newBatteryObject);
-//         } else 
-//         // 20% chance of creating a spike on a floor with 2 spaces above it
-//         if (i > 1 && cavernArray[i][j] == 0 && cavernArray[i+1][j] != 0 && cavernArray[i-1][j] == 0 ){
-//           //object is on floor!
-//           num = getRandomInt(1,100);
-//           if (num < 20){
-//             var newSpikeObject = {
-//               "gid":24,
-//               "height":16,
-//               "name":"",
-//               "properties":
-//               {
-//               },
-//               "type":"spike",
-//               "visible":true,
-//               "width":32,
-//               "x":(j*32),
-//               "y":((i+1)*32)
-//             };
-//             entitiesLayer.objects.push(newSpikeObject);
-//           } 
-//         }
-//       } 
-//     }
-//   }
-//   return entitiesLayer;
-// }
+function createTerminalPointsLayer(cavernWidth, cavernHeight,terminalPoints){
+  var terminalPointsLayer = 
+  {
+    "height":cavernHeight,
+    "name":"TerminalPoints",
+    "objects":[],
+    "opacity":1,
+    "type":"objectgroup",
+    "visible":true,
+    "width":cavernWidth,
+    "x":0,
+    "y":0
+  };
+  var newStartPointObject = {
+    "gid":99,
+    "height":16,
+    "name":"",
+    "properties":{},
+    "type":"startPoint",
+    "visible":true,
+    "width":16,
+    "x":terminalPoints[0]*32,
+    "y":(terminalPoints[1]-1)*32
+  };
+  terminalPointsLayer.objects.push(newStartPointObject);
+  for (i = 2; i< terminalPoints.length - 1; i = i+2){
+    var newExitPointObject = {
+      "gid":98,
+      "height":16,
+      "name":"",
+      "properties":
+      {},
+      "type":"battery",
+      "visible":true,
+      "width":16,
+      "x":terminalPoints[i]*32,
+      "y":(terminalPoints[i+1]-1)*32
+    };
+    terminalPointsLayer.objects.push(newExitPointObject);
+  }
+  return terminalPointsLayer;
+}
 
 
 // creates a json object containing all the fun stuff like spikes and bateries, 
@@ -189,7 +158,6 @@ function createEntitiesLayer(cavernWidth, cavernHeight, batteryLocations, spikeL
     "x":0,
     "y":0
    };
-   console.log(spikeLocations);
   for (var i = 0; i < cavernHeight-1; i++){
     for(var j = 0; j < cavernWidth; j++){
       if (batteryLocations[i][j] == 1){
@@ -224,46 +192,9 @@ function createEntitiesLayer(cavernWidth, cavernHeight, batteryLocations, spikeL
       } 
     }
   }
-  console.log(entitiesLayer);
   return entitiesLayer;
 }
 
-// function createEnemiesLayer(cavernWidth, cavernHeight, cavernArray){
-//   var enemiesLayer = {
-//     "height":cavernHeight,
-//     "name":"Enemies",
-//     "objects":[],
-//     "opacity":1,
-//     "type":"objectgroup",
-//     "visible":true,
-//     "width":cavernWidth,
-//     "x":0,
-//     "y":0
-//     }
-//   var num;
-//   for (var i = 0; i < cavernHeight-1; i++){
-//     for(var j = 0; j < cavernWidth; j++){
-//       if (cavernArray[i][j] == 0 && cavernArray[i+1][j] != 0){
-//         num = getRandomInt(1,100);
-//         if (num < 10){
-//           var newSlimeObject = {
-//             "gid":21,
-//             "height":8,
-//             "name":"",
-//             "properties": {},
-//             "type":"slime",
-//             "visible":true,
-//             "width":20,
-//             "x":(j*32),
-//             "y":(i*32 - 16)
-//           };
-//           enemiesLayer.objects.push(newSlimeObject);
-//         }
-//       }
-//     }
-//   }
-//   return enemiesLayer;
-// }
 
 function createEnemiesLayer(cavernWidth, cavernHeight,slimeLocations){
   var enemiesLayer = {
@@ -299,18 +230,6 @@ function createEnemiesLayer(cavernWidth, cavernHeight,slimeLocations){
   return enemiesLayer;
 }
 
-// // create the main cavern data
-// function createCavern(cavernWidth, cavernHeight){
-//   // var cavernArray = new Array();
-//   var initialArray = createDetailedCavern(cavernWidth, cavernHeight);
-//   //   for (var i = 0; i < cavernHeight; i++){
-//   //     for (var j = 0; j < cavernWidth; j++){
-//   //       cavernArray[i*cavernWidth + j] = initialArray[i][j];
-//   //     }
-//   //   }
-//   // return cavernArray;
-//   return lineariseArray(initialArray);
-// }
 
 // turns an array of arrays into a single linear array;
 function lineariseArray(initialArray){
@@ -437,12 +356,10 @@ function createSlimeLocations(cavernWidth, cavernHeight, rawCavernNess, forbidde
 function createSpikeLocations(cavernWidth, cavernHeight, rawCavernNess, forbiddenSpaces){
   var num; 
   var spikeLocations= new Array();
-  console.log(rawCavernNess);
-  console.log(forbiddenSpaces);
   for (var i = 0; i < cavernHeight; i++){
     spikeLocations[i]=new Array();
     for (var j = 0; j < cavernWidth; j++){
-      if (rawCavernNess[i][j] == 1 || forbiddenSpaces == -1){
+      if (rawCavernNess[i][j] == 1 || forbiddenSpaces[i][j] == -1){
         spikeLocations[i][j] = 0;
         // chance of being a spike if it's a space above ground and below another space
       } else if (i > 1 && i< cavernHeight - 1 && rawCavernNess[i+1][j] == 1 && rawCavernNess[i-1][j] == 0){
@@ -502,18 +419,39 @@ function addForbiddenSpaces(cavernWidth, cavernHeight, forbiddenSpaces, newObjec
 
 
 
-// This is a bit of a kludge, but: returns a 2t-length array. First 2 entries are the y and x co-ordinate of the start point.
-// other pairs are y-x co-ordinates for exits.
-function createTerminalPoints(cavernWidth, cavernHeight, cavernSkeleton, forbiddenSpaces){
+// This is a bit of a kludge, but: returns a 2t-length array. First 2 entries are the  X and y co-ordinate of the start point.
+// other pairs are X-Y co-ordinates for exits.
+function createTerminalPoints(cavernWidth, cavernHeight, rawCavernNess){
+  // start at a random x co-ord, on the highest floor 
+  var startX = getRandomInt(15, cavernWidth-15);
+  var startY = 0;
+  for (var i = 0; i < cavernHeight - 15; i++){
+    if (rawCavernNess[i][startX] == 0 && rawCavernNess[i+1][startX] == 1){
+      startY = i;
+      break;
+    }
+  }
   var terminalPoints = new Array();
-  terminalPoints[0] = 15;
-  terminalPoints[1] = 15;
-  terminalPoints[2] = cavernHeight - 15; 
-  terminalPoints[3] = cavernWidth - 15;
+  terminalPoints[0] = startX;
+  terminalPoints[1] = startY;   // this -2 is a magic number i don't understand right now
+  terminalPoints[2] = cavernWidth- 15; 
+  terminalPoints[3] = cavernHeight- 15;
+  return terminalPoints;
 }
 
+// updates the forbiidenArray, by placing forbidden points at the x and y co-ordinates corresponding to terminal (start and exit) points
 function updateForbiddenWithTerminals(cavernWidth, cavernHeight, forbiddenSpaces, terminalPoints){
-  return forbiddenSpaces;
+  var newArray = new Array();
+  for (var i = 0; i < cavernHeight; i++){
+    newArray[i]=new Array();
+    for (var j = 0; j < cavernWidth; j++){
+      newArray[i][j] = forbiddenSpaces[i][j];
+    }
+  }
+  for (var  h = 0; h < terminalPoints.length-1; h = h+2){
+    newArray[terminalPoints[h+1]][terminalPoints[h]] = -1;
+  }
+  return newArray;
 }
 
 
@@ -699,6 +637,25 @@ function createForbiddenSpaces(cavernWidth, cavernHeight){
     for (var j = 0; j < cavernWidth; j++){
       forbiddenSpaces[i][j] = 0;
     }
+  }
+   // now draw a wigglly route corresponding that will have to stay clear
+  for (var j = 15; j < cavernWidth - 15; j++){
+    forbiddenSpaces[15][j] = -1;
+  }
+  for (var j = 15; j < cavernWidth-15; j++){
+    forbiddenSpaces[25][j] = -1;
+  }
+  for (var j = 15; j < cavernWidth; j++){
+    forbiddenSpaces[35][j] = -1;
+  }
+  for (var i = 0; i < 15; i++){
+    forbiddenSpaces[i][15] = -1;
+  }
+  for (var i = 15; i < 25; i++){
+    forbiddenSpaces[i][cavernWidth-15] = -1;
+  }
+  for (var i = 25; i < 35; i++){
+    forbiddenSpaces[i][15] = -1;
   }
   return forbiddenSpaces;
 }

@@ -6,7 +6,9 @@ level = function (game) {
   GID = {
     SPIKE: 24,
     BATTERY: 16,
-    SLIME: 21
+    SLIME: 21,
+    STARTPOINT: 99,
+    EXITPOINT: 98.
   };
 
   var map;
@@ -109,6 +111,21 @@ level.prototype.create = function () {
     }
   }
 
+  //Get starting position
+  var startX = 490;
+  var startY = 100;
+  if (amIProcedural){
+    if (map.objects.TerminalPoints !== undefined){ 
+      for (var i = 0; i < map.objects.TerminalPoints.length; i++) {
+        var object = map.objects.TerminalPoints[i];
+        if (object.gid == GID.STARTPOINT) {
+          startX = object.x;
+          startY = object.y;
+        }
+      }
+    }
+  }
+
   // Light and shadow stuff
   // Create the shadow texture
   shadowTexture = game.add.bitmapData(4*game.width, 4*game.height);
@@ -118,13 +135,9 @@ level.prototype.create = function () {
   // everything below this sprite.
   lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
 
-
-  console.log(batteryLife);
-  console.log("game battery life");
-  console.log(game.batteryLife);
+ 
   this.batteryLife = game.batteryLife;
-  console.log(this.batteryLife);
-  player.init(490, 100, this.batteryLife);
+  player.init(startX, startY, this.batteryLife);
   game.camera.follow(player.sprite);
 
   // Create the GUI
