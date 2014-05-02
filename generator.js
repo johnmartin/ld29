@@ -120,7 +120,7 @@ function createTerminalPointsLayer(cavernWidth, cavernHeight,terminalPoints){
     "visible":true,
     "width":16,
     "x":terminalPoints[0]*32,
-    "y":(terminalPoints[1]-1)*32
+    "y":(terminalPoints[1]-1)*32  // the -1 is because the player is falling through the level at the start...
   };
   terminalPointsLayer.objects.push(newStartPointObject);
   for (i = 2; i< terminalPoints.length - 1; i = i+2){
@@ -134,7 +134,7 @@ function createTerminalPointsLayer(cavernWidth, cavernHeight,terminalPoints){
       "visible":true,
       "width":16,
       "x":terminalPoints[i]*32,
-      "y":(terminalPoints[i+1]-1)*32
+      "y":(terminalPoints[i+1])*32
     };
     terminalPointsLayer.objects.push(newExitPointObject);
   }
@@ -425,7 +425,7 @@ function createTerminalPoints(cavernWidth, cavernHeight, rawCavernNess){
   // start at a random x co-ord, on the highest floor 
   var startX = getRandomInt(15, cavernWidth-15);
   var startY = 0;
-  for (var i = 0; i < cavernHeight - 15; i++){
+  for (var i = 0; i < cavernHeight/2; i++){
     if (rawCavernNess[i][startX] == 0 && rawCavernNess[i+1][startX] == 1){
       startY = i;
       break;
@@ -433,9 +433,18 @@ function createTerminalPoints(cavernWidth, cavernHeight, rawCavernNess){
   }
   var terminalPoints = new Array();
   terminalPoints[0] = startX;
-  terminalPoints[1] = startY;   // this -2 is a magic number i don't understand right now
-  terminalPoints[2] = cavernWidth- 15; 
-  terminalPoints[3] = cavernHeight- 15;
+  terminalPoints[1] = startY;
+
+  var exitX = getRandomInt(15, cavernWidth-15);
+  var exitY = cavernHeight-15;
+  for (var i = cavernHeight-2; i > cavernHeight/2; i--){
+    if (rawCavernNess[i][exitX] == 0 && rawCavernNess[i+1][exitX] == 1){
+      exitY = i;
+      break;
+    }
+  }
+  terminalPoints[2] = exitX; 
+  terminalPoints[3] = exitY;
   return terminalPoints;
 }
 
