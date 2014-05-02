@@ -14,6 +14,7 @@ level = function (game) {
   var map;
   var layer;
   var player;
+  var exit;
   var bg;
   var gui;
 
@@ -58,6 +59,7 @@ level.prototype.preload = function () {
   level.load.spritesheet('gibs', 'assets/gibs.png', 4, 4);
   level.load.spritesheet('slime-gibs', 'assets/slime-gibs.png', 4, 4);
   level.load.spritesheet('slime', 'assets/slime.png', 20, 8);
+  level.load.spritesheet('exit', 'assets/dude.png', 24, 24);
 }
 
 level.prototype.create = function () {
@@ -84,6 +86,10 @@ level.prototype.create = function () {
 
   // The player and its settings
   player = new Player(game);
+
+  // The exit
+  exit = new Exit(game);
+
 
   // Do the enemies
   if (map.objects.Enemies !== undefined) {
@@ -121,6 +127,9 @@ level.prototype.create = function () {
         if (object.gid == GID.STARTPOINT) {
           startX = object.x;
           startY = object.y;
+        } else if (object.gid == GID.EXITPOINT){
+          console.log("yo");
+          exit.init(object.x, object.y);
         }
       }
     }
@@ -178,6 +187,7 @@ level.prototype.update = function (){
     }
   }
 
+  game.physics.arcade.overlap(player.sprite, exit.sprite, level.hitExit);
   // if (restartKey.isDown) {
   //   initialiseLevel();
   // }
@@ -257,11 +267,6 @@ level.prototype.update = function (){
   // Update the GUI items
   level.updateGUI();
 
-
-  if(player.body.x > 1500){
-    level.nextLevel();
-  }
-
 }
 
 
@@ -279,6 +284,10 @@ level.prototype.hitEntity = function (player, entity) {
 
 level.prototype.hitEnemy = function (player, enemy) {
   enemies[enemy.name].hit();
+}
+
+level.prototype.hitExit = function () {
+  level.nextLevel();
 }
 
 level.prototype.updateShadowTexture = function () {
