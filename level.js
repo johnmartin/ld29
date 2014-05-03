@@ -40,7 +40,7 @@
     function Create () {
       game.physics.startSystem(Phaser.Physics.ARCADE);
 
-      var jsonMap = createMap();
+      var jsonMap = createMap(game.level);
       game.cache.addTilemap('level', null, jsonMap, Phaser.Tilemap.TILED_JSON);
 
       map = game.add.tilemap('level');

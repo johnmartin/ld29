@@ -1,12 +1,22 @@
-function createMap(){
+function createMap(levelCount){
   // WELCOME TO ARRAY CITY
   // Here in Array City, we make one simple promise: No array will be changed outside the method in which it was created.
   // This allows our citizens (the arrays) to live with each other in harmony, and also makes bug fixing a little easier hopefully.
   console.log("creating map");
+  console.log(levelCount);
 
   var cavernWidth = 50;
-  var cavernHeight = 50;
+  var cavernHeight = 60;
 
+  if (levelCount == undefined){
+    cavernWidth = 50;
+  } else if (levelCount == 2){
+    cavernWidth = 100;
+  } else if (levelCount >= 3){
+    cavernWidth = 150;
+  }
+
+  console.log(cavernWidth);
 
   // create the 'no obstacle' route. This is, hypothetically, where our hero will travel
   var forbiddenSpaces = createForbiddenSpaces(cavernWidth, cavernHeight)
@@ -601,27 +611,6 @@ function createCavernSkeleton(cavernWidth, cavernHeight, forbiddenSpaces){
   }
 
 
-  // now draw a wigglly route corresponding that will have to stay clear
-  for (var j = 15; j < cavernWidth - 15; j++){
-    cavernArray[15][j] = -1;
-  }
-  for (var j = 15; j < cavernWidth-15; j++){
-    cavernArray[25][j] = -1;
-  }
-  for (var j = 15; j < cavernWidth; j++){
-    cavernArray[35][j] = -1;
-  }
-  for (var i = 0; i < 15; i++){
-    cavernArray[i][15] = -1;
-  }
-  for (var i = 15; i < 25; i++){
-    cavernArray[i][cavernWidth-15] = -1;
-  }
-  for (var i = 25; i < 35; i++){
-    cavernArray[i][15] = -1;
-  }
-
-
   // Also update based on the forbiddenSpaces array (just to see if you're listening)
   for (var i = 0; i < cavernHeight; i++){
     for (var j = 0; j < cavernWidth; j++){
@@ -630,6 +619,28 @@ function createCavernSkeleton(cavernWidth, cavernHeight, forbiddenSpaces){
       } else if (forbiddenSpaces[i][j] == -1){
         cavernArray[i][j] = -1;
       }
+    }
+  }
+
+
+  var floorY;
+  // draw horizontal layers that get broken up by forbiddenSpaces
+  floorY = 20;
+  for (var j = 5; j < cavernWidth - 5; j++){
+    if (forbiddenSpaces[floorY][j-2]!= -1 &&  forbiddenSpaces[floorY][j-1]!= -1 && forbiddenSpaces[floorY][j]!= -1 && forbiddenSpaces[floorY][j+1]!= -1 && forbiddenSpaces[floorY][j+2]!= -1){
+      cavernArray[floorY][j] = 1;
+    }
+  }
+  floorY = 30;
+  for (var j = 5; j < cavernWidth - 5; j++){
+    if (forbiddenSpaces[floorY][j-2]!= -1 &&  forbiddenSpaces[floorY][j-1]!= -1 && forbiddenSpaces[floorY][j]!= -1 && forbiddenSpaces[floorY][j+1]!= -1 && forbiddenSpaces[floorY][j+2]!= -1){
+      cavernArray[floorY][j] = 1;
+    }
+  }
+  floorY = 40;
+  for (var j = 5; j < cavernWidth - 5; j++){
+    if (forbiddenSpaces[floorY][j-2]!= -1 &&  forbiddenSpaces[floorY][j-1]!= -1 && forbiddenSpaces[floorY][j]!= -1 && forbiddenSpaces[floorY][j+1]!= -1 && forbiddenSpaces[floorY][j+2]!= -1){
+      cavernArray[floorY][j] = 1;
     }
   }
 
@@ -647,24 +658,26 @@ function createForbiddenSpaces(cavernWidth, cavernHeight){
       forbiddenSpaces[i][j] = 0;
     }
   }
-   // now draw a wigglly route corresponding that will have to stay clear
-  for (var j = 15; j < cavernWidth - 15; j++){
+
+  // draw horiztonal layers of moveability
+  for (var j = 15; j <= cavernWidth-15; j++){
     forbiddenSpaces[15][j] = -1;
-  }
-  for (var j = 15; j < cavernWidth-15; j++){
     forbiddenSpaces[25][j] = -1;
-  }
-  for (var j = 15; j < cavernWidth; j++){
     forbiddenSpaces[35][j] = -1;
+    forbiddenSpaces[45][j] = -1;
   }
-  for (var i = 0; i < 15; i++){
-    forbiddenSpaces[i][15] = -1;
+  var dropPointX;
+  dropPointX = getRandomInt(15, cavernWidth-15);
+  for (var i = 15; i <= 24; i++){
+    forbiddenSpaces[i][dropPointX] = -1;
   }
-  for (var i = 15; i < 25; i++){
-    forbiddenSpaces[i][cavernWidth-15] = -1;
+  dropPointX = getRandomInt(15, cavernWidth-15);
+  for (var i = 24; i <= 33; i++){
+    forbiddenSpaces[i][dropPointX] = -1;
   }
-  for (var i = 25; i < 35; i++){
-    forbiddenSpaces[i][15] = -1;
+  dropPointX = getRandomInt(15, cavernWidth-15);
+  for (var i = 33; i <= 42; i++){
+    forbiddenSpaces[i][dropPointX] = -1;
   }
   return forbiddenSpaces;
 }
