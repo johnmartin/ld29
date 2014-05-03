@@ -40,6 +40,7 @@ level = function (game) {
   var rightKey;
   var downKey;
   var jumpJustPressed;
+  var doubleJumping
 
   var blankObject = { alive: false };
   enemies = [];
@@ -229,14 +230,19 @@ level.prototype.update = function (){
   if (player.body.velocity.y > terminalVelocity) {
     player.body.velocity.y = terminalVelocity;
   }
+  // refresh the double jump ability
+  if (player.body.onFloor()){
+    doubleJumping = false;
+  }
   //  Allow the player to jump if they are touching the ground.
   if (cursors.up.isDown || upKey.isDown){
     if (player.body.touching.down || player.body.onFloor()){
       player.body.velocity.y = -playerJumpStrength;
-    } else if (!jumpJustPressed && player.battery > 0){
+    } else if (!jumpJustPressed && !doubleJumping){
       // double jump!
       player.body.velocity.y = -playerJumpStrength;
-      player.battery -= 200;
+      doubleJumping = true;
+      // player.battery -= 200;
     }
   }
 
