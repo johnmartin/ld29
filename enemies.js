@@ -53,17 +53,6 @@
     this.sprite.kill();
   };
 
-    // // Call the init
-    // Init();
-
-    // // Public instance functions
-    // this.update = Update;
-    // this.hit = Hit;
-
-    // // Public instance variables
-    // this.alive = alive;
-    // this.sprite = sprite;
-
   // Globals
   window.EnemySlime = Slime;
 

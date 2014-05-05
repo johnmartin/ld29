@@ -42,12 +42,6 @@
 
   };
 
-  // 
-  // Player.prototype.health = '';
-  // Player.prototype.battery = '';
-  // Player.prototype.torchOn = '';
-  // Player.prototype.facing = '';
-
   // Handles animation
   Player.prototype.animation = function (what) {
     this.sprite.animations.play(what + '-' + this.facing);
@@ -86,23 +80,6 @@
     }
     this.torchOn = true;
   };
-
-    // // Public instance functions
-    // this.init = Init;
-    // this.animation = Animation;
-    // this.update = Update;
-    // this.dead = Dead;
-    // this.hit = Hit;
-    // this.direction = Direction;
-    // this.add_battery = AddBattery;
-
-    // // Public instance variables
-    // this.sprite = sprite;
-    // this.torchOn = torchOn;
-    // this.battery = battery;
-    // this.health = health;
-
-  // }
 
   // Globals
   window.Player = Player;
