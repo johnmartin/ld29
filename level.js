@@ -304,9 +304,18 @@
       gui.endFill();
     }
 
+    function Shutdown () {
+      if (player != null){
+        player.sprite.kill();
+      }
+      entities = [];
+      enemies = [];
+    }
+
     this.preload = Preload;
     this.create = Create;
     this.update = Update;
+    this.shutdown = Shutdown;
 
   }
 
