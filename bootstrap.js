@@ -10,6 +10,7 @@
     TERMINAL_VELOCITY: 690,
     MAX_HEALTH: 100,
     MAX_BATTERY: 2000,
+    SLIME_SPEED: 20,
     GID: {
       SPIKE: 24,
       BATTERY: 16,

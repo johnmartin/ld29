@@ -123,6 +123,7 @@
       for (var i = 0; i < entities.length; i++) {
         if (entities[i].alive) {
           game.physics.arcade.overlap(player.sprite, entities[i].sprite, HitEntity);
+          // entities[i].update(layer);
         }
       }
 
@@ -256,9 +257,9 @@
 
       var angleToMouse = Math.atan2(game.input.activePointer.worldY - player.body.y, game.input.activePointer.worldX - player.body.x);
       if ( angleToMouse > 0-(Math.PI/2) && angleToMouse < Math.PI/2 ) {
-        player.direction('right');
+        player.facing = 'right';
       } else {
-        player.direction('left');
+        player.facing = 'left';
       }
 
       if (player.torchOn && !flicker) {
