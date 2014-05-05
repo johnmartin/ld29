@@ -18,9 +18,9 @@
     this.player = this.add.sprite(250, 250, 'dude');
     this.player.animations.add('move-right', [2, 3], 10);
 
-    var textComplete = this.add.text(game.width/2, 100, "Level " + this.game.level + " Complete!", { font: "65px Arial", fill: "#cccccc", align: "center" });
+    var textComplete = this.add.text(this.game.width/2, 100, "Level " + this.game.level + " Complete!", { font: "65px Arial", fill: "#cccccc", align: "center" });
     textComplete.anchor.set(0.5);
-    var textGo = this.add.text(game.width/2, 400, "Press T to continue", { font: "32px Arial", fill: "#cccccc", align: "center" });
+    var textGo = this.add.text(this.game.width/2, 400, "Press T to continue", { font: "32px Arial", fill: "#cccccc", align: "center" });
     textGo.anchor.set(0.5);
 
     this.continueKey = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
@@ -51,21 +51,21 @@
     var player = this.add.sprite(250, 250, 'dude');
     player.animations.add('move-right', [2, 3], 10);
 
-    var text = this.add.text(game.width/2, 100, "DEAD", { font: "65px Arial", fill: "#cccccc", align: "center" });
+    var text = this.add.text(this.game.width/2, 100, "DEAD", { font: "65px Arial", fill: "#cccccc", align: "center" });
     text.anchor.set(0.5);
 
-    var retirementText = this.add.text(game.width/2, 150, "\"...I was one day from retirement...\"", { font: "32px Arial", fill: "#cccccc", align: "center" });
+    var retirementText = this.add.text(this.game.width/2, 150, "\"...I was one day from retirement...\"", { font: "32px Arial", fill: "#cccccc", align: "center" });
     retirementText.anchor.set(0.5);
 
     if (game.level > 1){
-      var scoreText = this.add.text(game.width/2, 350, "You got to level " + game.levelCount + ".", { font: "32px Arial", fill: "#cccccc", align: "center" });
+      var scoreText = this.add.text(this.game.width/2, 350, "You got to level " + this.game.level + ".", { font: "32px Arial", fill: "#cccccc", align: "center" });
       scoreText.anchor.set(0.5);
     }
   
-    var lowerText = this.add.text(game.width/2, 400, "Press T to restart", {font: "32px Arial", fill: "#cccccc", align: "center" });
+    var lowerText = this.add.text(this.game.width/2, 400, "Press T to restart", {font: "32px Arial", fill: "#cccccc", align: "center" });
     lowerText.anchor.set(0.5);
 
-    this.restartKey = game.input.keyboard.addKey(Phaser.Keyboard.T);
+    this.restartKey = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
   };
 
   Death.prototype.update = function() {

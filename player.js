@@ -16,7 +16,7 @@
 
   Player.prototype.init = function (x, y) {
 
-    this.sprite = game.add.sprite(x, y, 'dude');
+    this.sprite = this.game.add.sprite(x, y, 'dude');
     this.sprite.name = 'player';
     this.sprite.animations.add('idle-right', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 5);
     this.sprite.animations.add('idle-left', [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6], 5);
@@ -26,14 +26,14 @@
     this.sprite.animations.add('jump-left', [9], 10);
 
     // Enable the physics on the sprite
-    game.physics.enable(this.sprite);
+    this.game.physics.enable(this.sprite);
     this.sprite.body.gravity.y = CONSTANT.GRAVITY;
     this.sprite.body.setSize(12, 24, 6, 0);
     this.sprite.body.linearDamping = 1;
     this.sprite.body.collideWorldBounds = true;
 
     // Setup the kill jibs
-    this.gibs = game.add.emitter(0, 0, 4);
+    this.gibs = this.game.add.emitter(0, 0, 4);
     this.gibs.makeParticles('gibs', [0, 1, 2, 3, 4], 10, true, true);
     this.gibs.gravity = CONSTANT.GRAVITY/4;
 
