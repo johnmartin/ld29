@@ -203,7 +203,7 @@
       UpdateGUI();
 
       if (player.body.x > CONSTANT.PLAYER_END_OF_LEVEL) {
-        // game.state.start('TransitionScreen');
+        game.state.start('ScreenTransition');
       }
 
     }
