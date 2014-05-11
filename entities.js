@@ -1,72 +1,66 @@
-// SPIKES!
-var EntitySpike = function (i, object, game, player) {
-  this.game = game;
-  this.player = player;
-  this.alive = true;
+!function (window, CONSTANT) {
 
-  this.sprite = game.add.sprite(object.x, object.y-16, 'spike');
-  this.sprite.name = i.toString();
-  game.physics.enable(this.sprite);
-  this.sprite.body.enableBody = true;
-  this.sprite.body.immovable = true;
-}
+  // SPIKES!
+  function Spikes (i, object, game, player) {
+    this.has_glow = false;
+    this.alive = true;
+    this.player = player;
 
-EntitySpike.prototype = Object.create(PIXI.Sprite.prototype);
-EntitySpike.prototype.constructor = Phaser.Sprite;
-
-EntitySpike.prototype.hit = function () {
-  this.player.dead();
-  game.state.start('DeathScreen');
-  return false;
-}
-
-EntitySpike.prototype.update = function () {
-}
-
-// BATTERIES!
-var EntityBattery = function (i, object, game, player) {
-  this.game = game;
-  this.player = player;
-  this.alive = true;
-
-  this.sprite = game.add.sprite(object.x, object.y-16, 'battery');
-  this.sprite.name = i.toString();
-  game.physics.enable(this.sprite);
-  this.sprite.body.enableBody = true;
-  this.sprite.body.immovable = true;
-}
-
-EntityBattery.prototype = Object.create(PIXI.Sprite.prototype);
-EntityBattery.prototype.constructor = Phaser.Sprite;
-
-EntityBattery.prototype.hit = function () {
-  this.alive = false;
-  this.sprite.kill();
-  this.player.battery += 1000;
-  if (this.player.battery > batteryMax) {
-    this.player.battery = batteryMax;
+    this.sprite = game.add.sprite(object.x, object.y - 16, 'spike');
+    this.sprite.name = i.toString();
+    game.physics.enable(this.sprite);
+    this.sprite.body.enableBody = true;
+    this.sprite.body.immovable = true;
   }
-  this.player.torchOn = true;
-  return false;
-}
 
-EntityBattery.prototype.update = function () {
-}
+  // Setup the PIXI/Phaser inheritance...
+  Spikes.prototype = Object.create(PIXI.Sprite.prototype);
+  Spikes.prototype.constructor = Phaser.Sprite;
 
-EntityBattery.prototype.glow = function (shadowTexture, x, y) {
-  // Draw circle of light with a soft edge around the battery
-  var radius = 20;
-  var gradient = shadowTexture.context.createRadialGradient(
-      x,y, radius * 0.5,
-      x,y, radius);
-  gradient.addColorStop(0, 'rgba(43, 135, 71, 0.5)');
-  gradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
+  Spikes.prototype.hit = function () {
+    this.player.dead();
+  };
 
-  shadowTexture.context.beginPath();
-  shadowTexture.context.fillStyle = gradient;
-  shadowTexture.context.arc(x, y,
-      radius, 0, Math.PI*2);
-  shadowTexture.context.fill();
+  // BATTERIES!
+  function Batteries (i, object, game, player) {
+    this.has_glow = true;
+    this.alive = true;
+    this.player = player;
 
-  return shadowTexture;
-}
+    this.sprite = game.add.sprite(object.x, object.y-16, 'battery');
+    this.sprite.name = i.toString();
+    game.physics.enable(this.sprite);
+    this.sprite.body.enableBody = true;
+    this.sprite.body.immovable = true;
+  }
+
+  // Setup the PIXI/Phaser inheritance...
+  Batteries.prototype = Object.create(PIXI.Sprite.prototype);
+  Batteries.prototype.constructor = Phaser.Sprite;
+
+  Batteries.prototype.hit = function () {
+    this.alive = false;
+    this.sprite.kill();
+    this.player.add_battery(1000);
+  };
+
+  Batteries.prototype.glow = function (shadowTexture, x, y) {
+    var radius = 20;
+    var gradient = shadowTexture.context.createRadialGradient(
+        x,y, radius * 0.5,
+        x,y, radius);
+    gradient.addColorStop(0, 'rgba(43, 135, 71, 0.5)');
+    gradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
+    shadowTexture.context.beginPath();
+    shadowTexture.context.fillStyle = gradient;
+    shadowTexture.context.arc(x, y,
+        radius, 0, Math.PI*2);
+    shadowTexture.context.fill();
+    return shadowTexture;
+  };
+
+  // Globals
+  window.EntitySpike = Spikes;
+  window.EntityBattery = Batteries;
+
+}(window, window.CONSTANT);

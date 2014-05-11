@@ -1,25 +1,16 @@
-var game = new Phaser.Game(544, 544, Phaser.AUTO, 'game', { preload: preload, create: create, update: update }, false, false);
+!function (window, CONSTANT) {
 
-// death screen stuff
-var deathScreen = new deathScreen(game);
-game.state.add('DeathScreen', deathScreen);
-game.retirementMessage = true;
+  var game = new Phaser.Game(544, 544, Phaser.AUTO, 'game', { create: create }, false, false);
 
-var transitionScreen = new transitionScreen(game);
-game.state.add('TransitionScreen', transitionScreen);
+  game.level = 1;
 
-var level = new level(game);
-game.state.add('Level', level);
+  // add the game states
+  game.state.add('ScreenDeath', new ScreenDeath(game));
+  game.state.add('ScreenTransition', new ScreenTransition(game));
+  game.state.add('Level', new Level(game));
 
-game.batteryLife = 2000;
-game.levelcount = 1;
+  function create () {
+    game.state.start('Level');
+  }
 
-function preload () {
-}
-
-function create () {
-  game.state.start('Level');
-}
-
-function update () {
-}
+}(window, window.CONSTANT);

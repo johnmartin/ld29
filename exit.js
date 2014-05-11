@@ -1,15 +1,18 @@
-// The Exit! Or maybe... AN exit???
-var Exit = function (game) {
-  this.game = game;
-  this.inited = false;
-}
+!function (window, CONSTANT) {
 
-Exit.prototype = Object.create(PIXI.Sprite.prototype);
-Exit.prototype.constructor = Phaser.Sprite;
+  function Exit (game) {
+    this.game = game;
+  }
 
-Exit.prototype.init = function(x, y) {
-  this.sprite = game.add.sprite(x, y, 'exit');
-  this.sprite.name = 'levelExit';
+  Exit.prototype = Object.create(PIXI.Sprite.prototype);
+  Exit.prototype.constructor = Phaser.Sprite;
 
-  game.physics.enable(this.sprite);
-}
+  Exit.prototype.init = function (x, y) {
+    this.sprite = this.game.add.sprite(x, y, 'exit');
+    this.sprite.name = 'levelExit';
+    this.game.physics.enable(this.sprite);
+  };
+
+  window.Exit = Exit;
+
+}(window, window.CONSTANT);
