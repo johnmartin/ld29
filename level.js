@@ -18,6 +18,11 @@
     var shadowTexture;
     var lightSprite;
     var jumpJustPressed = false;
+    var exit;
+    var batteryLife;
+    var startX = 490;
+    var startY = 100;
+    var doubleJumping = false;
 
     function Preload () {
       this.load.spritesheet('dude', 'assets/dude.png', 24, 24);
@@ -29,6 +34,7 @@
       this.load.spritesheet('gibs', 'assets/gibs.png', 4, 4);
       this.load.spritesheet('slime-gibs', 'assets/slime-gibs.png', 4, 4);
       this.load.spritesheet('slime', 'assets/slime.png', 20, 8);
+      this.load.spritesheet('exit', 'assets/dude.png', 24, 24);
     }
 
     function Create () {
@@ -50,6 +56,7 @@
 
       // The player and its settings
       player = new Player(game);
+      exit = new Exit(game);
 
       // Do the enemies
       if (map.objects.Enemies !== undefined) {
@@ -77,6 +84,18 @@
         }
       }
 
+      if (map.objects.TerminalPoints !== undefined) { 
+        for (var i = 0; i < map.objects.TerminalPoints.length; i++) {
+          var object = map.objects.TerminalPoints[i];
+          if (object.gid == CONSTANT.GID.STARTPOINT) {
+            startX = object.x;
+            startY = object.y;
+          } else if (object.gid == CONSTANT.GID.EXITPOINT){
+            exit.init(object.x, object.y);
+          }
+        }
+      }
+
       // Light and shadow stuff
       // Create the shadow texture
       shadowTexture = game.add.bitmapData(4*game.width, 4*game.height);
@@ -86,7 +105,8 @@
       // everything below this sprite.
       lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
 
-      player.init(490, 100);
+      batteryLife = game.batteryLife;
+      player.init(startX, startY, batteryLife);
 
       game.camera.follow(player.sprite);
 
@@ -127,10 +147,12 @@
         }
       }
 
+      game.physics.arcade.overlap(player.sprite, exit.sprite, HitExit);
+
       // if (restartKey.isDown) {
       //   initialiseLevel();
       // }
-
+ 
       var animation = 'idle';
 
       if (keyCursor.left.isDown || keyLeft.isDown) {
@@ -164,18 +186,21 @@
         }
       }
 
-      //update vertical movement based on terminal velocty - don't fall too fast!
+      // update vertical movement based on terminal velocty - don't fall too fast!
       if (player.body.velocity.y > CONSTANT.TERMINAL_VELOCITY) {
         player.body.velocity.y = CONSTANT.TERMINAL_VELOCITY;
+      }
+      if (player.body.onFloor()) {
+        doubleJumping = false;
       }
       //  Allow the player to jump if they are touching the ground.
       if (keyCursor.up.isDown || keyUp.isDown){
         if (player.body.touching.down || player.body.onFloor()){
           player.body.velocity.y -= CONSTANT.PLAYER_JUMP_STRENGTH;
-        } else if (!jumpJustPressed && player.battery > 0){
+        } else if (!jumpJustPressed && !doubleJumping) {
           // double jump!
           player.body.velocity.y = -CONSTANT.PLAYER_JUMP_STRENGTH;
-          player.battery -= 200;
+          doubleJumping = true;
         }
       }
 
@@ -208,12 +233,28 @@
 
     }
 
+    //update vertical movement based on terminal velocty - don't fall too fast!
+    // if (player.body.velocity.y > terminalVelocity) {
+    //   player.body.velocity.y = terminalVelocity;
+    // }
+    // // refresh the double jump ability
+    // if (player.body.onFloor()){
+    //   doubleJumping = false;
+    // }
+    // // double jump!
+    // player.body.velocity.y = -playerJumpStrength;
+    // doubleJumping = true;
+
     function HitEntity (player, entity) {
       entities[entity.name].hit();
     }
 
     function HitEnemy (player, enemy) {
       enemies[enemy.name].hit();
+    }
+
+    function HitExit (player, exit) {
+      NextLevel();
     }
 
     function UpdateShadowTexture () {
@@ -310,6 +351,11 @@
       }
       entities = [];
       enemies = [];
+    }
+
+    function NextLevel () {
+      game.batteryLife = player.battery;
+      game.state.start('ScreenTransition');
     }
 
     this.preload = Preload;

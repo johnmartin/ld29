@@ -14,7 +14,9 @@
     GID: {
       SPIKE: 24,
       BATTERY: 16,
-      SLIME: 21
+      SLIME: 21,
+      STARTPOINT: 99,
+      EXITPOINT: 98
     }
   };
 
