@@ -227,10 +227,6 @@
       // Update the GUI
       UpdateGUI();
 
-      if (player.body.x > CONSTANT.PLAYER_END_OF_LEVEL) {
-        game.state.start('ScreenTransition');
-      }
-
     }
 
     //update vertical movement based on terminal velocty - don't fall too fast!
