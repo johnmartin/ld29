@@ -53,12 +53,15 @@
   };
 
   Slime.prototype.hit = function () {
-    console.log(this);
-    var ex = this.sprite.x;
-    this.gibs.x = ex;
-    this.gibs.y = this.sprite.y;
-    this.gibs.start(true, 0, null, 60);
-    this.sprite.kill();
+    if (this.player.sprite.body.velocity.y > 0){
+      var ex = this.sprite.x;
+      this.gibs.x = ex;
+      this.gibs.y = this.sprite.y;
+      this.gibs.start(true, 0, null, 60);
+      this.sprite.kill();
+    } else {
+      this.player.dead();
+    }
   };
 
   // Globals
