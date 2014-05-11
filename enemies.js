@@ -33,7 +33,13 @@
   Slime.prototype.update = function (layer) {
     this.game.physics.arcade.collide(this.sprite, layer);
     this.game.physics.arcade.collide(this.gibs, layer);
-    this.game.physics.arcade.overlap(this.player.sprite, this.sprite, this.hit);
+    // calling this.game.physics.arcade.overlap(this.player.sprite, this. sprite, this.hit) from inside Slime
+    // seems to do something different to calling game.physics.arcade.overlap(player.sprite, enemies[i].sprite, HitEnemy) from Level.
+    // For whatever reason.
+    // So, we have to call it the old-fashioned way.
+    if (this.game.physics.arcade.overlap(this.player.sprite, this. sprite)){
+      this.hit();
+    }
     if (this.sprite.body.onWall()) {
       this.isMovingRight = !this.isMovingRight;
     }
@@ -47,7 +53,9 @@
   };
 
   Slime.prototype.hit = function () {
-    this.gibs.x = this.sprite.x;
+    console.log(this);
+    var ex = this.sprite.x;
+    this.gibs.x = ex;
     this.gibs.y = this.sprite.y;
     this.gibs.start(true, 0, null, 60);
     this.sprite.kill();
