@@ -16,8 +16,6 @@ function createMap(levelCount){
     cavernWidth = 150;
   }
 
-  console.log(cavernWidth);
-
   // create the 'no obstacle' route. This is, hypothetically, where our hero will travel
   var forbiddenSpaces = createForbiddenSpaces(cavernWidth, cavernHeight)
   // create the skeleton - spaces where blocks are forbidden or mandatory

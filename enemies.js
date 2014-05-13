@@ -60,7 +60,7 @@
       this.gibs.start(true, 0, null, 60);
       this.sprite.kill();
     } else {
-      this.player.dead();
+      this.player.hit(20);
     }
   };
 

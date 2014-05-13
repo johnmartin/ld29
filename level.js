@@ -135,6 +135,9 @@
       for (var i = 0; i < enemies.length; i++) {
         if (enemies[i].alive) {
           game.physics.arcade.overlap(player.sprite, enemies[i].sprite, HitEnemy);
+          // if (game.physics.arcade.overlap(player.sprite, enemies[i].sprite)){
+            // HitEnemy(player.sprite, enemies[i].sprite);
+          // }
           enemies[i].update(layer);
         }
       }

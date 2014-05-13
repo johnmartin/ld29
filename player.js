@@ -8,6 +8,7 @@
     this.battery = CONSTANT.MAX_BATTERY;
     this.torchOn = true;
     this.facing = 'right';
+    this.damageCooldown = 0;
   }
 
   // Setup the PIXI/Phaser inheritance...
@@ -54,19 +55,26 @@
     if (this.sprite.body.velocity.y > CONSTANT.TERMINAL_VELOCITY) {
       this.sprite.body.velocity.y = CONSTANT.TERMINAL_VELOCITY;
     }
+    if (this.damageCooldown >0){
+      this.damageCooldown--;
+    }
   };
 
   // Hit the player for damage
   Player.prototype.hit = function (amount) {
-    this.health -= amount;
-    if (this.health <= 0) {
-      this.dead();
+    if (this.damageCooldown == 0){
+      this.health -= amount;
+      this.damageCooldown = CONSTANT.DAMAGE_COOLDOWN;
+      if (this.health <= 0) {
+        this.dead();
+      }
     }
   };
 
   // Get's called whenever the player dies
   Player.prototype.dead = function () {
     this.health = 0;
+    this.damageCooldown = 0;
     this.gibs.x = this.sprite.x+6;
     this.gibs.y = this.sprite.y+12;
     this.gibs.start(true, 0, null, 60);
