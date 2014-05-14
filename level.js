@@ -23,6 +23,8 @@
     var startX = 490;
     var startY = 100;
     var doubleJumping = false;
+    var playerDead = false;
+    var deathCountdown = 0;
 
     function Preload () {
       this.load.spritesheet('dude', 'assets/dude.png', 24, 24);
@@ -57,6 +59,7 @@
       // The player and its settings
       player = new Player(game);
       exit = new Exit(game);
+      this.playerDead = false;
 
       // Do the enemies
       if (map.objects.Enemies !== undefined) {
@@ -224,6 +227,21 @@
         player.torchOn = false;
       }
 
+      if (player.alive == false && this.playerDead == false){
+        this.playerDead = true;
+        this.deathCountdown = CONSTANT.DEATH_COUNTDOWN;
+      }
+
+      // update 'death countdown', if player has died and we're about to go to death screen
+      if (this.playerDead == true){
+        if (this.deathCountdown > 0){
+          this.deathCountdown--;
+        } else {
+          this.game.state.start('ScreenDeath');
+        }
+      }
+
+
       // Update the shadow texture each frame
       UpdateShadowTexture();
 
@@ -254,6 +272,10 @@
 
     function HitExit (player, exit) {
       NextLevel();
+    }
+
+    // the player has died, so we start a countdown to reset the level
+    function PlayerDead(){
     }
 
     function UpdateShadowTexture () {

@@ -78,8 +78,9 @@
     this.gibs.x = this.sprite.x+6;
     this.gibs.y = this.sprite.y+12;
     this.gibs.start(true, 0, null, 60);
+    this.alive = false;
     this.sprite.kill();
-    this.game.state.start('ScreenDeath');
+    // this.game.state.start('ScreenDeath');
   };
 
   Player.prototype.add_battery = function (to_add) {
