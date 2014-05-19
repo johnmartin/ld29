@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="20" height="20" tilewidth="32" tileheight="32" backgroundcolor="#33153f">
  <tileset firstgid="1" name="Main tiles" tilewidth="32" tileheight="32">
-  <image source="underground-level.png" width="192" height="224"/>
+  <image source="underground-level.png" width="192" height="384"/>
   <tile id="0" terrain="0,0,,"/>
   <tile id="1" terrain="0,0,0,0"/>
   <tile id="6" terrain="0,0,0,0"/>
@@ -13,17 +13,32 @@
  </tileset>
  <layer name="World" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJztVEEKgCAQXAuzNE+9of9/MQMXhkEPqR2CFubgiDOrjkYRiRlLA2IFq7SVK+jujVpYYUBvWE7G9aYVfr1uvftOJuC2BAs4EnyeMzRnaa3qcV40o8xjxkpZe7pf9dH3wGt7zk+1PXBfuN+38zJCjzVNowfnSTOKHifBED8DX/urSx7shWPkL9XeBcw=
+   eJztlNsKgCAQRNfCLppP/UOX///BFFwaFn1I7SFo4RDt4ozllCMiFxkKcBkmKqsxobsUamHZBnvDGqnd3rjsr1etF86kg97s0cDqMXGmxEyLtawn88IZlX3MWCprT5+Xffh7kGtr3h9rG+h94XzfzksLPampCj1knjij6LF7zshBd6bDbPP08aoo/69OeUgvB/fYvwDQlgXD
+  </data>
+ </layer>
+ <layer name="World supports" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUDCQQBGIhOponSAPzSHH/SDOPUvsGMwAAsl4Bkw==
   </data>
  </layer>
  <layer name="World texture" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJzVVEEOwCAI4wdwGf9/6mKyZg3BGYeLWS8SqVBjUUTE5MZBsVOsSZ45kevyHtCjSb8KUKui7W/QMWUbvtDW3jZ62K9eGvJYjWLWlO2Bj9oRzI1aZoH6rC+iUj+br5WzYWPKdqz+C7I7V3ze8xD/kexHozNK+UzX0917nufZaZwTY2cEwQ==
+   eJzVVNEKgDAI9A/0pf1KEf3/d5WQdIhutRHRwcjpTa/SEREJXZjALmBzEEeO5xbqh+nhoN4ILNeItr+B25TP8IY2/be+h8tZi13cngI2aop8xrfcihliyPVaMojbW74C8SxP5sec27GWc63gj+Yrmg2vr0fD3TOKp33R0leb9967IKsZ+Vvv09IXfSu8I7EfBc4wxCNdtbpZz+PsKGcH5oMGyg==
   </data>
  </layer>
- <layer name="Decorations" width="20" height="20">
+ <layer name="Decorations - behind player" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2BggQISWxaI5YFYEklOBsqWAmJFqJwMVE4Ki3kSSGwhKBaHiksgySOLCUJpcQr8MQroA7DFOSUAPc6VGCBpkFIzQelUgQGRBmWwqFNGswuW7rHZLwjFMABKr+pArAnlazAg0rM6lA9yhxoDap6gJgAAs0YFgA==
+   eJztkt0KgCAMhX0NC7XUu37oBer9H6sNJo2YlGR00wcH3HEeUabUz8+3dGztSJrqlWqkAfVsD2mFvMDWEWTIsyBPUuQb5kdSCQtoBE2F564YMr703rt5UqYXvDvgu+eMP5LeoqmcZ081/vH2MBP/Fee0U8dcaaEP9x27L/U4oTfNayIIPWm+DatzvTXYAYmjCCA=
+  </data>
+ </layer>
+ <layer name="Player" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2BwA62BdsAoGAWjACsAAJ3YACs=
+  </data>
+ </layer>
+ <layer name="Decorations - ahead of player" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2BggQuZ+pyp6grygOFAO4AEQA+3guwwBWIjOtg1CgYeAAAZKAGC
   </data>
  </layer>
 </map>
