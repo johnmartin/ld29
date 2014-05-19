@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="20" height="20" tilewidth="32" tileheight="32" backgroundcolor="#33153f">
+ <tileset firstgid="1" name="Main tiles" tilewidth="32" tileheight="32">
+  <image source="underground-level.png" width="192" height="224"/>
+  <tile id="0" terrain="0,0,,"/>
+  <tile id="1" terrain="0,0,0,0"/>
+  <tile id="6" terrain="0,0,0,0"/>
+  <tile id="7" terrain=",0,,0"/>
+  <tile id="13" terrain="0,0,0,0"/>
+  <tile id="14" terrain="0,,,0"/>
+  <tile id="15" terrain=",,0,"/>
+  <tile id="21" terrain=",0,,"/>
+ </tileset>
+ <layer name="World" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJztVEEKgCAQXAuzNE+9of9/MQMXhkEPqR2CFubgiDOrjkYRiRlLA2IFq7SVK+jujVpYYUBvWE7G9aYVfr1uvftOJuC2BAs4EnyeMzRnaa3qcV40o8xjxkpZe7pf9dH3wGt7zk+1PXBfuN+38zJCjzVNowfnSTOKHifBED8DX/urSx7shWPkL9XeBcw=
+  </data>
+ </layer>
+ <layer name="World texture" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJzVVEEOwCAI4wdwGf9/6mKyZg3BGYeLWS8SqVBjUUTE5MZBsVOsSZ45kevyHtCjSb8KUKui7W/QMWUbvtDW3jZ62K9eGvJYjWLWlO2Bj9oRzI1aZoH6rC+iUj+br5WzYWPKdqz+C7I7V3ze8xD/kexHozNK+UzX0917nufZaZwTY2cEwQ==
+  </data>
+ </layer>
+ <layer name="Decorations" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2BggQISWxaI5YFYEklOBsqWAmJFqJwMVE4Ki3kSSGwhKBaHiksgySOLCUJpcQr8MQroA7DFOSUAPc6VGCBpkFIzQelUgQGRBmWwqFNGswuW7rHZLwjFMABKr+pArAnlazAg0rM6lA9yhxoDap6gJgAAs0YFgA==
+  </data>
+ </layer>
+</map>
